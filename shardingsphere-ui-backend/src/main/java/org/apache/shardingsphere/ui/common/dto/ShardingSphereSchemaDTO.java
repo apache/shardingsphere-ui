@@ -23,13 +23,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Sharding schema DTO.
+ * ShardingSphere schema DTO.
  */
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public final class ShardingSchemaDTO {
+public final class ShardingSphereSchemaDTO {
     
     private String name;
     
