@@ -20,7 +20,7 @@ shardingsphere-ui-backend模块是一个标准的spring boot项目。
 ## 如何构建
 
 ```bash
-git clone https://github.com/apache/shardingsphere.git
+git clone https://github.com/apache/shardingsphere-ui.git
 cd shardingsphere/shardingsphere-ui/
 mvn clean package -Prelease
 ```
