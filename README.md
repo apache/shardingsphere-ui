@@ -20,8 +20,8 @@ shardingsphere-ui-backend is a standard spring boot project.
 ## How to Build
 
 ```bash
-git clone https://github.com/apache/shardingsphere.git
-cd shardingsphere/shardingsphere-ui/
+git clone https://github.com/apache/shardingsphere-ui.git
+cd shardingsphere-ui/
 mvn clean package -Prelease
 ```
 
