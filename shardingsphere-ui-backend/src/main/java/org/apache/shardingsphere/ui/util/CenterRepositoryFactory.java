@@ -23,6 +23,7 @@ import org.apache.shardingsphere.orchestration.center.ConfigCenterRepository;
 import org.apache.shardingsphere.orchestration.center.RegistryCenterRepository;
 import org.apache.shardingsphere.orchestration.center.config.CenterConfiguration;
 import org.apache.shardingsphere.orchestration.center.instance.CuratorZookeeperCenterRepository;
+import org.apache.shardingsphere.orchestration.center.instance.EtcdCenterRepository;
 import org.apache.shardingsphere.ui.common.constant.InstanceType;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
 
@@ -55,6 +56,11 @@ public final class CenterRepositoryFactory {
             case ZOOKEEPER:
                 result = new CuratorZookeeperCenterRepository();
                 break;
+            case ETCD:
+                EtcdCenterRepository etcdCenterRepository = new EtcdCenterRepository();
+                etcdCenterRepository.setProperties(new Properties());
+                result = etcdCenterRepository;
+                break;
             default:
                 throw new UnsupportedOperationException(config.getName());
         }
@@ -78,6 +84,11 @@ public final class CenterRepositoryFactory {
         switch (instanceType) {
             case ZOOKEEPER:
                 result = new CuratorZookeeperCenterRepository();
+                break;
+            case ETCD:
+                EtcdCenterRepository etcdCenterRepository = new EtcdCenterRepository();
+                etcdCenterRepository.setProperties(new Properties());
+                result = etcdCenterRepository;
                 break;
             default:
                 throw new UnsupportedOperationException(config.getName());
