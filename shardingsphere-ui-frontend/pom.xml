@@ -36,7 +36,6 @@
         <profile>
             <id>node</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
             </activation>
             <build>
                 <plugins>
@@ -101,6 +100,7 @@
         <profile>
             <id>node-cn</id>
             <activation>
+                <activeByDefault>true</activeByDefault>
                 <property>
                     <name>node</name>
                     <value>cn</value>
