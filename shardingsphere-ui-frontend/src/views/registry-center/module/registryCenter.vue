@@ -101,6 +101,7 @@
         <el-form-item :label="$t('registryCenter.registDialog.centerType')" prop="instanceType">
           <el-radio-group v-model="form.instanceType">
             <el-radio label="Zookeeper">Zookeeper</el-radio>
+            <el-radio label="Etcd">Etcd</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('registryCenter.registDialog.address')" prop="serverLists">
@@ -152,6 +153,7 @@
         <el-form-item :label="$t('registryCenter.registDialog.centerType')" prop="instanceType">
           <el-radio-group v-model="editForm.instanceType">
             <el-radio label="Zookeeper">Zookeeper</el-radio>
+            <el-radio label="Etcd">Etcd</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('registryCenter.registDialog.address')" prop="serverLists">

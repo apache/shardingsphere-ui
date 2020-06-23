@@ -97,7 +97,7 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {
             // CHECKSTYLE:ON
-            throw new IllegalArgumentException("rule configuration is invalid.");
+            throw new IllegalArgumentException("rule configuration is invalid.", ex);
         }
     }
     
