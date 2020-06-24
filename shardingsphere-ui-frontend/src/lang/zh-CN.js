@@ -121,7 +121,7 @@ export default {
       name: '请输入注册中心名称',
       centerType: '请选择注册中心类型',
       namespaces: '请输入命名空间',
-      address: '请选输入注册中心地址',
+      address: '请输入注册中心地址',
       orchestrationName: '请输入数据治理实例名称',
       digest: '请输入登录凭证'
     }
@@ -151,7 +151,7 @@ export default {
       name: '请输入配置中心名称',
       centerType: '请选择配置中心类型',
       namespaces: '请输入命名空间',
-      address: '请选输入配置中心地址',
+      address: '请输入配置中心地址',
       orchestrationName: '请输入数据治理实例名称',
       digest: '请输入登录凭证'
     }
