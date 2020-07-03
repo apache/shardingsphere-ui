@@ -32,7 +32,7 @@ import java.util.Optional;
  * Implementation of metadata center operation service.
  */
 @Service
-public class MetadataCenterServiceImpl implements MetadataCenterService {
+public final class MetadataCenterServiceImpl implements MetadataCenterService {
 
     @Resource
     private CenterConfigService centerConfigService;
@@ -45,5 +45,4 @@ public class MetadataCenterServiceImpl implements MetadataCenterService {
         }
         throw new ShardingSphereUIException(ShardingSphereUIException.SERVER_ERROR, "No activated metadata center!");
     }
-
 }

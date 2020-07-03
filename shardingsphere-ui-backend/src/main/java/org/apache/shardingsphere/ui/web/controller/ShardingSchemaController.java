@@ -125,6 +125,7 @@ public final class ShardingSchemaController {
 
     /**
      * Load meta data configuration.
+     *
      * @param schemaName schema name
      * @return response result
      */

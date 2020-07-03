@@ -20,7 +20,7 @@ package org.apache.shardingsphere.ui.servcie;
 import org.apache.shardingsphere.orchestration.core.metadatacenter.MetaDataCenterNode;
 
 /**
- * metadata center service.
+ * Metadata center service.
  **/
 public interface MetadataCenterService {
 
@@ -30,5 +30,4 @@ public interface MetadataCenterService {
      * @return metadata center node
      */
     MetaDataCenterNode getActivateMetaDataCenterNode();
-
 }

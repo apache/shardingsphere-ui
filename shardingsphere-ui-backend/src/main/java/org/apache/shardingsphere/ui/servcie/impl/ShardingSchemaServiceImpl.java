@@ -96,7 +96,7 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
     }
 
     @Override
-    public String getMetadataConfiguration(String schemaName) {
+    public String getMetadataConfiguration(final String schemaName) {
         return configCenterService.getActivatedConfigCenter().get(
                 metadataCenterService.getActivateMetaDataCenterNode().getMetaDataCenterNodeFullPath(schemaName));
     }
