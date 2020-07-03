@@ -43,6 +43,24 @@
     <el-row>
       <el-button type="primary" icon="el-icon-plus" @click="add" />
     </el-row>
+    <el-dialog :visible.sync="showMetadataDialogVisible" :title="type" width="80%" top="3vh">
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <span style="font-size: 18px; font-weight: bold;">Result (JS object dump):</span>
+          <el-input
+            :rows="20"
+            :placeholder="$t('ruleConfig.form.inputPlaceholder')"
+            v-model="textarea2"
+            type="textarea"
+            readonly
+            class="show-text"
+          />
+        </el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showMetadataDialogVisible = false">{{ $t('btn.cancel') }}</el-button>
+      </span>
+    </el-dialog>
     <el-dialog :visible.sync="centerDialogVisible" :title="type" width="80%" top="3vh">
       <el-row :gutter="20">
         <el-col :span="12">
@@ -72,8 +90,8 @@
         <el-button type="primary" @click="onConfirm">{{ $t('btn.submit') }}</el-button>
       </span>
     </el-dialog>
-    <el-dialog 
-      :visible.sync="addSchemaDialogVisible" 
+    <el-dialog
+      :visible.sync="addSchemaDialogVisible"
       :title="$t('ruleConfig.schema.title')"
       width="80%" top="3vh">
       <el-form ref="form" :model="form" :rules="rules" label-width="170px">
@@ -101,6 +119,17 @@
             v-model="form.dataSourceConfig"
             autocomplete="off"
             type="textarea"
+            class="edit-text"
+          />
+        </el-form-item>
+        <el-form-item :label="$t('ruleConfig.schema.metadataConfig')" prop="metadataConfig">
+          <el-input
+            :placeholder="$t('ruleConfig.schemaRules.metadataConfig')"
+            :rows="8"
+            v-model="form.metadataConfig"
+            autocomplete="off"
+            type="string"
+            readonly
             class="edit-text"
           />
         </el-form-item>
@@ -142,10 +171,13 @@ export default {
       schemaName: ``,
       rueleConfigTextArea: ``,
       dataSourceConfigTextArea: ``,
+      metadataConfigTextArea: ``,
+      showMetadataDialogVisible: false,
       form: {
         name: '',
         ruleConfig: '',
-        dataSourceConfig: ''
+        dataSourceConfig: '',
+        metadataConfig: ''
       },
       rules: {
         name: [
@@ -166,6 +198,13 @@ export default {
           {
             required: true,
             message: this.$t('ruleConfig').schemaRules.dataSourceConfig,
+            trigger: 'change'
+          }
+        ],
+        metadataConfig: [
+          {
+            required: true,
+            message: this.$t('ruleConfig').schemaRules.metadataConfig,
             trigger: 'change'
           }
         ]
@@ -239,11 +278,29 @@ export default {
         API.getSchemaRule(parent).then(res => {
           this.renderYaml(parent, child, res)
         })
-      } else {
+      } else if (child === 'datasource') {
         API.getSchemaDataSource(parent).then(res => {
           this.renderYaml(parent, child, res)
         })
+      } else {
+        //child is metadata
+        API.getSchemaMetadata(parent).then(res => {
+          this.renderMetadataYaml(parent, child, res)
+        })
       }
+    },
+    renderMetadataYaml(parent, child, res) {
+      if (!res.success) return
+      const model = res.model
+      if (Object.prototype.toString.call(model) === '[object String]') {
+        this.textarea = model
+      } else {
+        this.textarea = JSON.stringify(model, null, '\t')
+      }
+      this.sname = parent
+      this.scname = child
+      this.type = `${parent}-${child}`
+      this.showMetadataDialogVisible = true
     },
     renderYaml(parent, child, res) {
       if (!res.success) return
@@ -261,7 +318,7 @@ export default {
     getSchema() {
       API.getSchema().then(res => {
         const data = res.model
-        const base = ['rule', 'datasource']
+        const base = ['rule', 'datasource', 'metadata']
         const newData = []
         for (const v of data) {
           newData.push({
@@ -368,6 +425,10 @@ export default {
     }
     .icon-1 {
       background: url('../../../assets/img/data-source.png') no-repeat left
+        center;
+    }
+    .icon-2 {
+      background: url('../../../assets/img/meta-data.png') no-repeat left
         center;
     }
     .edit-btn {

@@ -665,6 +665,7 @@ export default {
     selectChange(item) {
       this.getSchemaDataSource(item)
       this.getSchemaRule(item)
+      this.getSchemaMetadata(item)
     },
     getSchemaDataSource(schemaName) {
       API.getSchemaDataSource(schemaName).then(res => {
@@ -678,6 +679,16 @@ export default {
     },
     getSchemaRule(schemaName) {
       API.getSchemaRule(schemaName).then(res => {
+        const { model } = res
+        if (Object.prototype.toString.call(model) === '[object String]') {
+          this.textareaRule = model
+        } else {
+          this.textareaRule = JSON.stringify(model, null, '\t')
+        }
+      })
+    },
+    getSchemaMetadata(schemaName) {
+      API.getSchemaMetadata(schemaName).then(res => {
         const { model } = res
         if (Object.prototype.toString.call(model) === '[object String]') {
           this.textareaRule = model

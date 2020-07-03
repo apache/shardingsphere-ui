@@ -78,4 +78,12 @@ public interface ShardingSchemaService {
      * @param schemaName schema name
      */
     void deleteSchemaConfiguration(String schemaName);
+
+    /**
+     * Get meta data configuration.
+     *
+     * @param schemaName schema name
+     * @return meta data configuration
+     */
+    String getMetadataConfiguration(String schemaName);
 }

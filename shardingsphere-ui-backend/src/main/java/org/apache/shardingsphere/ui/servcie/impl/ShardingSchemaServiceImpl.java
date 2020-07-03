@@ -24,6 +24,7 @@ import com.google.common.base.Strings;
 import org.apache.shardingsphere.infra.config.DataSourceConfiguration;
 import org.apache.shardingsphere.orchestration.center.ConfigCenterRepository;
 import org.apache.shardingsphere.ui.servcie.ConfigCenterService;
+import org.apache.shardingsphere.ui.servcie.MetadataCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingSchemaService;
 import org.apache.shardingsphere.ui.util.ConfigurationYamlConverter;
 import org.springframework.stereotype.Service;
@@ -39,10 +40,13 @@ import java.util.Map;
  */
 @Service
 public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
-    
+
     @Resource
     private ConfigCenterService configCenterService;
-    
+
+    @Resource
+    private MetadataCenterService metadataCenterService;
+
     @Override
     public Collection<String> getAllSchemaNames() {
         return configCenterService.getActivatedConfigCenter().getChildrenKeys(configCenterService.getActivateConfigurationNode().getSchemaPath());
@@ -90,7 +94,13 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
         schemaNameList.remove(schemaName);
         configCenterRepository.persist(configCenterService.getActivateConfigurationNode().getSchemaPath(), Joiner.on(",").join(schemaNameList));
     }
-    
+
+    @Override
+    public String getMetadataConfiguration(String schemaName) {
+        return configCenterService.getActivatedConfigCenter().get(
+                metadataCenterService.getActivateMetaDataCenterNode().getMetaDataCenterNodeFullPath(schemaName));
+    }
+
     private void checkRuleConfiguration(final String configData) {
         try {
             ConfigurationYamlConverter.loadRuleConfigurations(configData);

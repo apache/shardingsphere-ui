@@ -122,5 +122,15 @@ public final class ShardingSchemaController {
         shardingSchemaService.updateDataSourceConfiguration(schemaName, configMap.get("dataSourceConfig"));
         return ResponseResultUtil.success();
     }
+
+    /**
+     * Load meta data configuration.
+     * @param schemaName schema name
+     * @return response result
+     */
+    @RequestMapping(value = "/metadata/{schemaName}", method = RequestMethod.GET)
+    public ResponseResult<String> loadMetadataConfiguration(@PathVariable("schemaName") final String schemaName) {
+        return ResponseResultUtil.build(shardingSchemaService.getMetadataConfiguration(schemaName));
+    }
     
 }

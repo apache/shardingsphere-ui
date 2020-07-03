@@ -15,24 +15,20 @@
  * limitations under the License.
  */
 
-import API from '@/utils/api'
-import ruleConfigApi from '@/views/rule-config/api'
+package org.apache.shardingsphere.ui.servcie;
 
-const { getSchema, getSchemaDataSource, getSchemaRule, getSchemaMetadata } = ruleConfigApi
+import org.apache.shardingsphere.orchestration.core.metadatacenter.MetaDataCenterNode;
 
-export default {
-  getJobServer: (params = {}) => API.get(`/api/shardingscaling`, params),
-  postJobServer: (params = {}) => API.post(`/api/shardingscaling`, params),
-  getJobStart: (params = {}) =>
-    API.post(`/api/shardingscaling/job/start`, params),
-  getJobList: (params = {}) =>
-    API.get(`/api/shardingscaling/job/list`, params),
-  getJobProgress: jobId =>
-    API.get(`/api/shardingscaling/job/progress/${jobId}`),
-  postJobStop: (params = {}) =>
-    API.post(`/api/shardingscaling/job/stop`, params),
-  getSchema,
-  getSchemaDataSource,
-  getSchemaRule,
-  getSchemaMetadata
+/**
+ * metadata center service.
+ **/
+public interface MetadataCenterService {
+
+    /**
+     * Get activated metadata center node.
+     *
+     * @return metadata center node
+     */
+    MetaDataCenterNode getActivateMetaDataCenterNode();
+
 }
