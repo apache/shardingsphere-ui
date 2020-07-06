@@ -26,6 +26,7 @@ export default {
   putSchemaRule: (schemaName, params = {}) => API.put(`/api/schema/rule/${schemaName}`, params),
   getSchemaDataSource: (schemaName) => API.get(`/api/schema/datasource/${schemaName}`),
   putSchemaDataSource: (schemaName, params = {}) => API.put(`/api/schema/datasource/${schemaName}`, params),
+  getSchemaMetadata: (schemaName) => API.get(`/api/schema/metadata/${schemaName}`),
   // Authentication
   getAuth: () => API.get(`/api/authentication`),
   putAuth: (params = {}) => API.put(`/api/authentication`, params),

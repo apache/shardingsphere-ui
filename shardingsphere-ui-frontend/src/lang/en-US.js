@@ -177,12 +177,14 @@ export default {
       title: 'Add Schema',
       name: 'Name',
       ruleConfig: 'Rule Config',
-      dataSourceConfig: 'Data Source Config'
+      dataSourceConfig: 'Data Source Config',
+      metadataConfig: 'Metadata Config'
     },
     schemaRules: {
       name: 'Please enter the name of the schema',
       ruleConfig: 'Please enter the rule config of the schema',
-      dataSourceConfig: 'Please enter the data source config of the schema'
+      dataSourceConfig: 'Please enter the data source config of the schema',
+      metadataConfig: 'Please enter the metadata config of the schema'
     },
     radioBtn: {
       schema: 'Schema',
