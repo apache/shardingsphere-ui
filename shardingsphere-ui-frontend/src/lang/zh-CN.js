@@ -241,6 +241,9 @@ export default {
       offLine: '下线',
       disabled: '禁用',
       unknown: '未知'
+    },
+    configBar: {
+      refreshPeriodLabel: '定时刷新'
     }
   }
 }
