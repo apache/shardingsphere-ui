@@ -243,6 +243,9 @@ export default {
       offLine: 'OFFLINE',
       disabled: 'DISABLED',
       unknown: 'UNKNOWN'
+    },
+    configBar: {
+      refreshPeriodLabel: 'Auto Refresh'
     }
   }
 }

@@ -16,7 +16,18 @@
   -->
 
 <template>
-  <div style="width: 100%; height: 100%">
+  <div style="width: 100%; height: 100%; position: relative;">
+    <div class="configBar">
+      <label for="refreshPeriod">{{ $t("clusterState.configBar.refreshPeriodLabel") }}:</label>
+      <el-switch
+        v-model="autoRefreshFlag"
+        active-color="#13ce66"
+        inactive-color="#ff4949">
+      </el-switch>
+      <select v-model="refreshInterval" name="refreshPeriod">
+        <option v-for="(item,index) of refreshOptions" :value="item.millis" :key="index">{{ item.name }}</option>
+      </select>
+    </div>
     <div id="myChart" class="echarts"></div>
   </div>
 </template>
@@ -47,6 +58,15 @@ export default {
       },
       myChart: {},
       timer: {},
+      refreshOptions: [
+        { name: '30s', millis: 30000 },
+        { name: '60s', millis: 60000 },
+        { name: '2min', millis: 120000 },
+        { name: '5min', millis: 300000 },
+        { name: '30min', millis: 1800000 }
+      ],
+      prevRefreshMillis: 0,
+      autoRefreshFlag: true,
       refreshInterval: 60000
     }
   },
@@ -63,6 +83,19 @@ export default {
   methods: {
     refresh() {
       this.loadAllInstanceStates()
+    },
+    tryAutoRefresh() {
+      const curMillis = new Date().getTime()
+      if (!this.autoRefreshFlag) {
+        return
+      } else if (!this.prevRefreshMillis) {
+        this.prevRefreshMillis = curMillis
+        return
+      } else if (curMillis - this.prevRefreshMillis < this.refreshInterval) {
+        return
+      }
+      this.prevRefreshMillis = curMillis
+      this.refresh()
     },
     loadAllInstanceStates() {
       API.loadInstanceStates().then(res => {
@@ -87,7 +120,7 @@ export default {
       this.myChart.setOption(this.option)
     },
     startTimer() {
-      this.timer = setInterval(this.refresh, this.refreshInterval, this.refreshInterval)
+      this.timer = setInterval(this.tryAutoRefresh, 1)
     },
     initProxy() {
       this.proxy = []
@@ -367,5 +400,13 @@ export default {
   height: 100%;
   width: 100%;
   padding-top: 10px;
+}
+.configBar {
+  z-index: 100;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 14px;
+  font-weight: 500;
 }
 </style>
