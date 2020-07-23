@@ -9,7 +9,7 @@ ShardingSphere UI是[ShardingSphere](https://shardingsphere.apache.org/)的管�
 
 ### ShardingSphere UI 前端
 
-shardingsphere-ui-frontend模块基于[vue](https://github.com/vuejs/vue)，并使用了UI工具包[element](https://github.com/ElemeFE/element)。
+shardingsphere-ui-frontend模块基于[Vue.js](https://github.com/vuejs/vue)，并使用了UI工具包[element](https://github.com/ElemeFE/element)。
 
 * [shardingsphere-ui-frontend/README_ZH.md](shardingsphere-ui-frontend/README_ZH.md)
 

@@ -9,7 +9,7 @@ ShardingSphere UI is a management background for [ShardingSphere](https://shardi
 
 ### ShardingSphere UI Frontend
 
-shardingsphere-ui-frontend based on [vue](https://github.com/vuejs/vue) and use the UI Toolkit [element](https://github.com/ElemeFE/element).
+shardingsphere-ui-frontend based on [Vue.js](https://github.com/vuejs/vue) and use the UI Toolkit [element](https://github.com/ElemeFE/element).
 
 * [shardingsphere-ui-frontend/README.md](shardingsphere-ui-frontend/README.md)
 
