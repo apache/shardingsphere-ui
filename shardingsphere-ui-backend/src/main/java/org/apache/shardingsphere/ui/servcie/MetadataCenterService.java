@@ -17,7 +17,7 @@
 
 package org.apache.shardingsphere.ui.servcie;
 
-import org.apache.shardingsphere.orchestration.core.metadatacenter.MetaDataCenterNode;
+import org.apache.shardingsphere.orchestration.core.metadata.MetaDataCenterNode;
 
 /**
  * Metadata center service.

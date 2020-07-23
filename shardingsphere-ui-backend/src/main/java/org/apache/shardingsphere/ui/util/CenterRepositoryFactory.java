@@ -19,11 +19,11 @@ package org.apache.shardingsphere.ui.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.shardingsphere.orchestration.center.ConfigCenterRepository;
-import org.apache.shardingsphere.orchestration.center.RegistryCenterRepository;
-import org.apache.shardingsphere.orchestration.center.config.CenterConfiguration;
-import org.apache.shardingsphere.orchestration.center.instance.CuratorZookeeperCenterRepository;
-import org.apache.shardingsphere.orchestration.center.instance.EtcdCenterRepository;
+import org.apache.shardingsphere.orchestration.repository.zookeeper.CuratorZookeeperCenterRepository;
+import org.apache.shardingsphere.orchestration.repository.api.ConfigCenterRepository;
+import org.apache.shardingsphere.orchestration.repository.api.RegistryCenterRepository;
+import org.apache.shardingsphere.orchestration.repository.api.config.CenterConfiguration;
+import org.apache.shardingsphere.orchestration.repository.etcd.EtcdCenterRepository;
 import org.apache.shardingsphere.ui.common.constant.InstanceType;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
 
@@ -105,5 +105,4 @@ public final class CenterRepositoryFactory {
         result.getProps().put("digest", config.getDigest());
         return result;
     }
-    
 }
