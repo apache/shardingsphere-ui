@@ -17,7 +17,7 @@
 
 package org.apache.shardingsphere.ui.servcie.impl;
 
-import org.apache.shardingsphere.orchestration.core.metadatacenter.MetaDataCenterNode;
+import org.apache.shardingsphere.orchestration.core.metadata.MetaDataCenterNode;
 import org.apache.shardingsphere.ui.common.constant.OrchestrationType;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
 import org.apache.shardingsphere.ui.common.exception.ShardingSphereUIException;

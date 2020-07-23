@@ -22,7 +22,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import org.apache.shardingsphere.infra.config.DataSourceConfiguration;
-import org.apache.shardingsphere.orchestration.center.ConfigCenterRepository;
+import org.apache.shardingsphere.orchestration.repository.api.ConfigCenterRepository;
 import org.apache.shardingsphere.ui.servcie.ConfigCenterService;
 import org.apache.shardingsphere.ui.servcie.MetadataCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingSchemaService;

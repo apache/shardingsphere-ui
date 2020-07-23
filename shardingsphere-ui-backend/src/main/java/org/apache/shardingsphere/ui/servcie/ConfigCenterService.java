@@ -17,8 +17,8 @@
 
 package org.apache.shardingsphere.ui.servcie;
 
-import org.apache.shardingsphere.orchestration.center.ConfigCenterRepository;
-import org.apache.shardingsphere.orchestration.core.configcenter.ConfigCenterNode;
+import org.apache.shardingsphere.orchestration.core.config.ConfigCenterNode;
+import org.apache.shardingsphere.orchestration.repository.api.ConfigCenterRepository;
 
 /**
  * Config center service
