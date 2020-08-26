@@ -59,12 +59,6 @@ export const constantRouterMap = [
     component: () => import('@/views/data-scaling'),
     hidden: true,
     name: 'Data scaling'
-  },
-  {
-    path: '/cluster-state',
-    component: () => import('@/views/cluster'),
-    hidden: true,
-    name: 'Cluster state'
   }
 ]
 

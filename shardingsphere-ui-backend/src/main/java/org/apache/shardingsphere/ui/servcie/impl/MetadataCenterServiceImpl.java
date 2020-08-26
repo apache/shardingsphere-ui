@@ -41,7 +41,7 @@ public final class MetadataCenterServiceImpl implements MetadataCenterService {
     public MetaDataCenterNode getActivateMetaDataCenterNode() {
         Optional<CenterConfig> optional = centerConfigService.loadActivated(OrchestrationType.CONFIG_CENTER.getValue());
         if (optional.isPresent()) {
-            return new MetaDataCenterNode(optional.get().getOrchestrationName());
+            return new MetaDataCenterNode();
         }
         throw new ShardingSphereUIException(ShardingSphereUIException.SERVER_ERROR, "No activated metadata center!");
     }
