@@ -19,11 +19,11 @@ package org.apache.shardingsphere.ui.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.shardingsphere.orchestration.repository.zookeeper.CuratorZookeeperCenterRepository;
-import org.apache.shardingsphere.orchestration.repository.api.ConfigCenterRepository;
-import org.apache.shardingsphere.orchestration.repository.api.RegistryCenterRepository;
-import org.apache.shardingsphere.orchestration.repository.api.config.CenterConfiguration;
-import org.apache.shardingsphere.orchestration.repository.etcd.EtcdCenterRepository;
+import org.apache.shardingsphere.orchestration.repository.api.ConfigurationRepository;
+import org.apache.shardingsphere.orchestration.repository.api.RegistryRepository;
+import org.apache.shardingsphere.orchestration.repository.api.config.OrchestrationCenterConfiguration;
+import org.apache.shardingsphere.orchestration.repository.etcd.EtcdRepository;
+import org.apache.shardingsphere.orchestration.repository.zookeeper.CuratorZookeeperRepository;
 import org.apache.shardingsphere.ui.common.constant.InstanceType;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
 
@@ -36,9 +36,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CenterRepositoryFactory {
     
-    private static final ConcurrentHashMap<String, RegistryCenterRepository> REGISTRY_CENTER_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, RegistryRepository> REGISTRY_CENTER_MAP = new ConcurrentHashMap<>();
     
-    private static final ConcurrentHashMap<String, ConfigCenterRepository> CONFIG_CENTER_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, ConfigurationRepository> CONFIG_CENTER_MAP = new ConcurrentHashMap<>();
     
     /**
      * Create registry center instance.
@@ -46,25 +46,25 @@ public final class CenterRepositoryFactory {
      * @param config registry center config
      * @return registry center
      */
-    public static RegistryCenterRepository createRegistryCenter(final CenterConfig config) {
-        RegistryCenterRepository result = REGISTRY_CENTER_MAP.get(config.getName());
+    public static RegistryRepository createRegistryCenter(final CenterConfig config) {
+        RegistryRepository result = REGISTRY_CENTER_MAP.get(config.getName());
         if (null != result) {
             return result;
         }
         InstanceType instanceType = InstanceType.nameOf(config.getInstanceType());
         switch (instanceType) {
             case ZOOKEEPER:
-                result = new CuratorZookeeperCenterRepository();
+                result = new CuratorZookeeperRepository();
                 break;
             case ETCD:
-                EtcdCenterRepository etcdCenterRepository = new EtcdCenterRepository();
+                EtcdRepository etcdCenterRepository = new EtcdRepository();
                 etcdCenterRepository.setProps(new Properties());
                 result = etcdCenterRepository;
                 break;
             default:
                 throw new UnsupportedOperationException(config.getName());
         }
-        result.init(convert(config));
+        result.init(config.getName(), convert(config));
         REGISTRY_CENTER_MAP.put(config.getName(), result);
         return result;
     }
@@ -75,33 +75,31 @@ public final class CenterRepositoryFactory {
      * @param config config center config
      * @return config center
      */
-    public static ConfigCenterRepository createConfigCenter(final CenterConfig config) {
-        ConfigCenterRepository result = CONFIG_CENTER_MAP.get(config.getName());
+    public static ConfigurationRepository createConfigCenter(final CenterConfig config) {
+        ConfigurationRepository result = CONFIG_CENTER_MAP.get(config.getName());
         if (null != result) {
             return result;
         }
         InstanceType instanceType = InstanceType.nameOf(config.getInstanceType());
         switch (instanceType) {
             case ZOOKEEPER:
-                result = new CuratorZookeeperCenterRepository();
+                result = new CuratorZookeeperRepository();
                 break;
             case ETCD:
-                EtcdCenterRepository etcdCenterRepository = new EtcdCenterRepository();
+                EtcdRepository etcdCenterRepository = new EtcdRepository();
                 etcdCenterRepository.setProps(new Properties());
                 result = etcdCenterRepository;
                 break;
             default:
                 throw new UnsupportedOperationException(config.getName());
         }
-        result.init(convert(config));
+        result.init(config.getName(), convert(config));
         CONFIG_CENTER_MAP.put(config.getName(), result);
         return result;
     }
     
-    private static CenterConfiguration convert(final CenterConfig config) {
-        CenterConfiguration result = new CenterConfiguration(config.getInstanceType(), new Properties());
-        result.setServerLists(config.getServerLists());
-        result.setNamespace(config.getNamespace());
+    private static OrchestrationCenterConfiguration convert(final CenterConfig config) {
+        OrchestrationCenterConfiguration result = new OrchestrationCenterConfiguration(config.getInstanceType(), config.getServerLists(), new Properties());
         result.getProps().put("digest", config.getDigest());
         return result;
     }
