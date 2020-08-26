@@ -84,7 +84,7 @@ public final class RegistryCenterController {
      */
     @RequestMapping(value = "/connect", method = RequestMethod.POST)
     public ResponseResult<Boolean> connect(@RequestBody final CenterConfig config) {
-        CenterRepositoryFactory.createRegistryCenter(centerConfigService.load(config.getName(), OrchestrationType.REGISTRY_CENTER.getValue()));
+        CenterRepositoryFactory.createRegistryRepository(centerConfigService.load(config.getName(), OrchestrationType.REGISTRY_CENTER.getValue()));
         centerConfigService.setActivated(config.getName(), OrchestrationType.REGISTRY_CENTER.getValue());
         return ResponseResultUtil.build(Boolean.TRUE);
     }

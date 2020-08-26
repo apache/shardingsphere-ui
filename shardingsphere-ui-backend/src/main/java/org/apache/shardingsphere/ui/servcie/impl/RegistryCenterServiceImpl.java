@@ -43,7 +43,7 @@ public final class RegistryCenterServiceImpl implements RegistryCenterService {
     public RegistryRepository getActivatedRegistryCenter() {
         Optional<CenterConfig> optional = centerConfigService.loadActivated(OrchestrationType.REGISTRY_CENTER.getValue());
         if (optional.isPresent()) {
-            return CenterRepositoryFactory.createRegistryCenter(optional.get());
+            return CenterRepositoryFactory.createRegistryRepository(optional.get());
         }
         throw new ShardingSphereUIException(ShardingSphereUIException.SERVER_ERROR, "No activated registry center!");
     }

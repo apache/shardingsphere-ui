@@ -36,18 +36,18 @@ import java.util.concurrent.ConcurrentHashMap;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CenterRepositoryFactory {
     
-    private static final ConcurrentHashMap<String, RegistryRepository> REGISTRY_CENTER_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, RegistryRepository> REGISTRY_REPOSITORY_MAP = new ConcurrentHashMap<>();
     
-    private static final ConcurrentHashMap<String, ConfigurationRepository> CONFIG_CENTER_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, ConfigurationRepository> CONFIG_REPOSITORY_MAP = new ConcurrentHashMap<>();
     
     /**
-     * Create registry center instance.
+     * Create registry repository.
      *
-     * @param config registry center config
-     * @return registry center
+     * @param config center config
+     * @return registry repository
      */
-    public static RegistryRepository createRegistryCenter(final CenterConfig config) {
-        RegistryRepository result = REGISTRY_CENTER_MAP.get(config.getName());
+    public static RegistryRepository createRegistryRepository(final CenterConfig config) {
+        RegistryRepository result = REGISTRY_REPOSITORY_MAP.get(config.getName());
         if (null != result) {
             return result;
         }
@@ -65,18 +65,18 @@ public final class CenterRepositoryFactory {
                 throw new UnsupportedOperationException(config.getName());
         }
         result.init(config.getName(), convert(config));
-        REGISTRY_CENTER_MAP.put(config.getName(), result);
+        REGISTRY_REPOSITORY_MAP.put(config.getName(), result);
         return result;
     }
     
     /**
-     * Create config center instance.
+     * Create configuration repository.
      * 
-     * @param config config center config
-     * @return config center
+     * @param config center config
+     * @return configuration repository
      */
-    public static ConfigurationRepository createConfigCenter(final CenterConfig config) {
-        ConfigurationRepository result = CONFIG_CENTER_MAP.get(config.getName());
+    public static ConfigurationRepository createConfigurationRepository(final CenterConfig config) {
+        ConfigurationRepository result = CONFIG_REPOSITORY_MAP.get(config.getName());
         if (null != result) {
             return result;
         }
@@ -94,7 +94,7 @@ public final class CenterRepositoryFactory {
                 throw new UnsupportedOperationException(config.getName());
         }
         result.init(config.getName(), convert(config));
-        CONFIG_CENTER_MAP.put(config.getName(), result);
+        CONFIG_REPOSITORY_MAP.put(config.getName(), result);
         return result;
     }
     

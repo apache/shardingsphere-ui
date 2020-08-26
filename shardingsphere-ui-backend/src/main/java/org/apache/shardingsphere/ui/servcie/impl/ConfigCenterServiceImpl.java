@@ -43,7 +43,7 @@ public final class ConfigCenterServiceImpl implements ConfigCenterService {
     public ConfigurationRepository getActivatedConfigCenter() {
         Optional<CenterConfig> optional = centerConfigService.loadActivated(OrchestrationType.CONFIG_CENTER.getValue());
         if (optional.isPresent()) {
-            return CenterRepositoryFactory.createConfigCenter(optional.get());
+            return CenterRepositoryFactory.createConfigurationRepository(optional.get());
         }
         throw new ShardingSphereUIException(ShardingSphereUIException.SERVER_ERROR, "No activated config center!");
     }

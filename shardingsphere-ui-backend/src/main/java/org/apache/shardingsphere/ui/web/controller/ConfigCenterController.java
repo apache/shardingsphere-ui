@@ -84,7 +84,7 @@ public final class ConfigCenterController {
      */
     @RequestMapping(value = "/connect", method = RequestMethod.POST)
     public ResponseResult<Boolean> connect(@RequestBody final CenterConfig config) {
-        CenterRepositoryFactory.createConfigCenter(centerConfigService.load(config.getName(), OrchestrationType.CONFIG_CENTER.getValue()));
+        CenterRepositoryFactory.createConfigurationRepository(centerConfigService.load(config.getName(), OrchestrationType.CONFIG_CENTER.getValue()));
         centerConfigService.setActivated(config.getName(), OrchestrationType.CONFIG_CENTER.getValue());
         return ResponseResultUtil.build(Boolean.TRUE);
     }
