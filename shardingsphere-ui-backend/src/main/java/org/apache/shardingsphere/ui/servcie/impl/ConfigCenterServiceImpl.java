@@ -17,9 +17,8 @@
 
 package org.apache.shardingsphere.ui.servcie.impl;
 
-import org.apache.shardingsphere.orchestration.core.config.ConfigCenterNode;
-import org.apache.shardingsphere.orchestration.repository.api.ConfigurationRepository;
-import org.apache.shardingsphere.ui.common.constant.OrchestrationType;
+import org.apache.shardingsphere.governance.core.config.ConfigCenterNode;
+import org.apache.shardingsphere.governance.repository.api.ConfigurationRepository;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
 import org.apache.shardingsphere.ui.common.exception.ShardingSphereUIException;
 import org.apache.shardingsphere.ui.servcie.CenterConfigService;
@@ -41,7 +40,7 @@ public final class ConfigCenterServiceImpl implements ConfigCenterService {
     
     @Override
     public ConfigurationRepository getActivatedConfigCenter() {
-        Optional<CenterConfig> optional = centerConfigService.loadActivated(OrchestrationType.CONFIG_CENTER.getValue());
+        Optional<CenterConfig> optional = centerConfigService.loadActivated();
         if (optional.isPresent()) {
             return CenterRepositoryFactory.createConfigurationRepository(optional.get());
         }
@@ -50,7 +49,7 @@ public final class ConfigCenterServiceImpl implements ConfigCenterService {
     
     @Override
     public ConfigCenterNode getActivateConfigurationNode() {
-        Optional<CenterConfig> optional = centerConfigService.loadActivated(OrchestrationType.CONFIG_CENTER.getValue());
+        Optional<CenterConfig> optional = centerConfigService.loadActivated();
         if (optional.isPresent()) {
             return new ConfigCenterNode();
         }

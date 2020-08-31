@@ -26,8 +26,6 @@ import org.apache.shardingsphere.ui.servcie.CenterConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -40,19 +38,19 @@ public final class CenterConfigServiceImpl implements CenterConfigService {
     private CenterConfigsRepository centerConfigsRepository;
     
     @Override
-    public CenterConfig load(final String name, final String orchestrationType) {
-        return find(name, orchestrationType, loadAll());
+    public CenterConfig load(final String name) {
+        return find(name, loadAll());
     }
     
     @Override
-    public Optional<CenterConfig> loadActivated(String orchestrationType) {
-        return Optional.ofNullable(findActivatedCenterConfiguration(loadAll(orchestrationType)));
+    public Optional<CenterConfig> loadActivated() {
+        return Optional.ofNullable(findActivatedCenterConfiguration(loadAll()));
     }
     
     @Override
     public void add(final CenterConfig config) {
         CenterConfigs configs = loadAll();
-        CenterConfig existedConfig = find(config.getName(), config.getOrchestrationType(), configs);
+        CenterConfig existedConfig = find(config.getName(), configs);
         if (null != existedConfig) {
             throw new ShardingSphereUIException(ShardingSphereUIException.SERVER_ERROR, String.format("Center %s already existed!", config.getName()));
         }
@@ -61,9 +59,9 @@ public final class CenterConfigServiceImpl implements CenterConfigService {
     }
     
     @Override
-    public void delete(final String name, final String orchestrationType) {
+    public void delete(final String name) {
         CenterConfigs configs = loadAll();
-        CenterConfig toBeRemovedConfig = find(name, orchestrationType, configs);
+        CenterConfig toBeRemovedConfig = find(name, configs);
         if (null != toBeRemovedConfig) {
             configs.getCenterConfigs().remove(toBeRemovedConfig);
             centerConfigsRepository.save(configs);
@@ -71,13 +69,13 @@ public final class CenterConfigServiceImpl implements CenterConfigService {
     }
     
     @Override
-    public void setActivated(final String name, final String orchestrationType) {
+    public void setActivated(final String name) {
         CenterConfigs configs = loadAll();
-        CenterConfig config = find(name, orchestrationType, configs);
+        CenterConfig config = find(name, configs);
         if (null == config) {
             throw new ShardingSphereUIException(ShardingSphereUIException.SERVER_ERROR, "Center not existed!");
         }
-        CenterConfig activatedConfig = findActivatedCenterConfiguration(configs, orchestrationType);
+        CenterConfig activatedConfig = findActivatedCenterConfiguration(configs);
         if (!config.equals(activatedConfig)) {
             if (null != activatedConfig) {
                 activatedConfig.setActivated(false);
@@ -93,30 +91,17 @@ public final class CenterConfigServiceImpl implements CenterConfigService {
     }
     
     @Override
-    public CenterConfigs loadAll(String orchestrationType) {
-        CenterConfigs result = new CenterConfigs();
-        List<CenterConfig> centerConfigs = new ArrayList<>();
-        centerConfigsRepository.load().getCenterConfigs().stream()
-                .filter(each->orchestrationType.equals(each.getOrchestrationType()))
-                .forEach(each->centerConfigs.add(each));
-        result.setCenterConfigs(centerConfigs);
-        return result;
-    }
-    
-    @Override
     public void update(CenterConfigDTO config) {
         CenterConfigs configs = loadAll();
         if (!config.getPrimaryName().equals(config.getName())) {
-            CenterConfig existedConfig = find(config.getName(), config.getOrchestrationType(), configs);
+            CenterConfig existedConfig = find(config.getName(), configs);
             if (null != existedConfig) {
                 throw new ShardingSphereUIException(ShardingSphereUIException.SERVER_ERROR, String.format("Center %s already existed!", config.getName()));
             }
         }
-        CenterConfig toBeUpdatedConfig = find(config.getPrimaryName(), config.getOrchestrationType(), configs);
+        CenterConfig toBeUpdatedConfig = find(config.getPrimaryName(), configs);
         if (null != toBeUpdatedConfig) {
             toBeUpdatedConfig.setName(config.getName());
-            toBeUpdatedConfig.setNamespace(config.getNamespace());
-            toBeUpdatedConfig.setOrchestrationType(config.getOrchestrationType());
             toBeUpdatedConfig.setInstanceType(config.getInstanceType());
             toBeUpdatedConfig.setServerLists(config.getServerLists());
             toBeUpdatedConfig.setOrchestrationName(config.getOrchestrationName());
@@ -126,22 +111,15 @@ public final class CenterConfigServiceImpl implements CenterConfigService {
     }
     
     private CenterConfig findActivatedCenterConfiguration(final CenterConfigs centerConfigs) {
-        return centerConfigs.getCenterConfigs().stream()
+        return null == centerConfigs ? null : centerConfigs.getCenterConfigs().stream()
                 .filter(each->each.isActivated())
                 .findAny()
                 .orElse(null);
     }
     
-    private CenterConfig findActivatedCenterConfiguration(final CenterConfigs centerConfigs, final String orchestrationType) {
-        return centerConfigs.getCenterConfigs().stream()
-                .filter(each->each.isActivated() && orchestrationType.equals(each.getOrchestrationType()))
-                .findAny()
-                .orElse(null);
-    }
-    
-    private CenterConfig find(final String name, final String orchestrationType, final CenterConfigs configs) {
+    private CenterConfig find(final String name, final CenterConfigs configs) {
         return configs.getCenterConfigs().stream()
-                .filter(each->name.equals(each.getName()) && orchestrationType.equals(each.getOrchestrationType()))
+                .filter(each->name.equals(each.getName()))
                 .findAny()
                 .orElse(null);
     }

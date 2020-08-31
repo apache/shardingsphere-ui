@@ -17,8 +17,7 @@
 
 package org.apache.shardingsphere.ui.servcie.impl;
 
-import org.apache.shardingsphere.orchestration.core.metadata.MetaDataCenterNode;
-import org.apache.shardingsphere.ui.common.constant.OrchestrationType;
+import org.apache.shardingsphere.governance.core.metadata.MetaDataCenterNode;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
 import org.apache.shardingsphere.ui.common.exception.ShardingSphereUIException;
 import org.apache.shardingsphere.ui.servcie.CenterConfigService;
@@ -39,7 +38,7 @@ public final class MetadataCenterServiceImpl implements MetadataCenterService {
 
     @Override
     public MetaDataCenterNode getActivateMetaDataCenterNode() {
-        Optional<CenterConfig> optional = centerConfigService.loadActivated(OrchestrationType.CONFIG_CENTER.getValue());
+        Optional<CenterConfig> optional = centerConfigService.loadActivated();
         if (optional.isPresent()) {
             return new MetaDataCenterNode();
         }

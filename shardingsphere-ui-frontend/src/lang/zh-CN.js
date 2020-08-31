@@ -20,29 +20,20 @@ export default {
     home: '主页',
     menuData: [
       {
-        title: '配置中心',
+        title: '治理',
         child: [
           {
-            title: '服务列表',
-            href: '/config-center'
+            title: '注册中心',
+            href: '/registry-center'
           },
           {
             title: '配置管理',
             href: '/rule-config'
-          }
-        ]
-      },
-      {
-        title: '注册中心',
-        child: [
-          {
-            title: '服务列表',
-            href: '/registry-center'
           },
           {
             title: '运行状态',
             href: '/runtime-status'
-          }
+          },
         ]
       },
       {
@@ -99,6 +90,8 @@ export default {
       editTitle: '编辑注册中心',
       name: '注册中心名称',
       centerType: '注册中心类型',
+      additionalCenterType: '扩展配置中心类型',
+      additionalAddress: '扩展配置中心地址',
       address: '注册中心地址',
       orchestrationName: '数据治理实例',
       namespaces: '命名空间',

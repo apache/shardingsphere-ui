@@ -35,13 +35,15 @@ public final class CenterConfig {
     
     private String serverLists;
     
-    private String namespace;
-    
     private String orchestrationName;
     
-    private String orchestrationType;
-    
     private String digest;
+    
+    private String additionalConfigCenterType;
+    
+    private String additionalConfigCenterServerList;
+    
+    private String additionalDigest;
     
     private boolean activated;
     

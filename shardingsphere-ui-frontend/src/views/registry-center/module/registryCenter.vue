@@ -118,17 +118,23 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.namespaces')" prop="namespace">
+        <el-form-item :label="$t('registryCenter.registDialog.additionalCenterType')" prop="additionalConfigCenterType">
+          <el-radio-group v-model="form.additionalConfigCenterType">
+            <el-radio label="Zookeeper">Zookeeper</el-radio>
+            <el-radio label="Etcd">Etcd</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="$t('registryCenter.registDialog.additionalAddress')" prop="additionalConfigCenterServerList">
           <el-input
-            :placeholder="$t('registryCenter.rules.namespaces')"
-            v-model="form.namespace"
+            :placeholder="$t('registryCenter.rules.address')"
+            v-model="form.additionalConfigCenterServerList"
             autocomplete="off"
           />
         </el-form-item>
         <el-form-item :label="$t('registryCenter.registDialog.digest')">
           <el-input
             :placeholder="$t('registryCenter.rules.digest')"
-            v-model="form.digest"
+            v-model="form.additionalDigest"
             autocomplete="off"
           />
         </el-form-item>
@@ -170,17 +176,30 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.namespaces')" prop="namespace">
+        <el-form-item :label="$t('registryCenter.registDialog.digest')">
           <el-input
-            :placeholder="$t('registryCenter.rules.namespaces')"
-            v-model="editForm.namespace"
+            :placeholder="$t('registryCenter.rules.digest')"
+            v-model="editForm.digest"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item :label="$t('registryCenter.registDialog.additionalCenterType')" prop="additionalConfigCenterType">
+          <el-radio-group v-model="editForm.additionalConfigCenterType">
+            <el-radio label="Zookeeper">Zookeeper</el-radio>
+            <el-radio label="Etcd">Etcd</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="$t('registryCenter.registDialog.additionalAddress')" prop="additionalConfigCenterServerList">
+          <el-input
+            :placeholder="$t('registryCenter.rules.address')"
+            v-model="editForm.additionalConfigCenterServerList"
             autocomplete="off"
           />
         </el-form-item>
         <el-form-item :label="$t('registryCenter.registDialog.digest')">
           <el-input
             :placeholder="$t('registryCenter.rules.digest')"
-            v-model="editForm.digest"
+            v-model="editForm.additionalDigest"
             autocomplete="off"
           />
         </el-form-item>
@@ -219,32 +238,38 @@ export default {
           prop: 'serverLists'
         },
         {
-          label: this.$t('registryCenter').registDialog.namespaces,
-          prop: 'namespace'
-        },
-        {
           label: this.$t('registryCenter').registDialog.orchestrationName,
           prop: 'orchestrationName'
-        }
+        },
+        {
+          label: this.$t('registryCenter').registDialog.additionalCenterType,
+          prop: 'additionalConfigCenterType'
+        },
+        {
+          label: this.$t('registryCenter').registDialog.additionalAddress,
+          prop: 'additionalConfigCenterServerList'
+        },
       ],
       form: {
         name: '',
         serverLists: '',
-        namespace: '',
         instanceType: 'Zookeeper',
         orchestrationName: '',
-        orchestrationType: 'registry_center',
-        digest: ''
+        digest: '',
+        additionalConfigCenterType: '',
+        additionalConfigCenterServerList: '',
+        additionalDigest: ''
       },
       editForm: {
         primaryName: '',
         name: '',
         serverLists: '',
-        namespace: '',
         instanceType: 'Zookeeper',
         orchestrationName: '',
-        orchestrationType: 'registry_center',
-        digest: ''
+        digest: '',
+        additionalConfigCenterType: '',
+        additionalConfigCenterServerList: '',
+        additionalDigest: ''
       },
       rules: {
         name: [

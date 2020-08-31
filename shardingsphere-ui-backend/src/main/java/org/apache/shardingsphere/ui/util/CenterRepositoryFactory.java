@@ -17,13 +17,15 @@
 
 package org.apache.shardingsphere.ui.util;
 
+import com.google.common.base.Strings;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.shardingsphere.orchestration.repository.api.ConfigurationRepository;
-import org.apache.shardingsphere.orchestration.repository.api.RegistryRepository;
-import org.apache.shardingsphere.orchestration.repository.api.config.OrchestrationCenterConfiguration;
-import org.apache.shardingsphere.orchestration.repository.etcd.EtcdRepository;
-import org.apache.shardingsphere.orchestration.repository.zookeeper.CuratorZookeeperRepository;
+import org.apache.shardingsphere.governance.repository.api.ConfigurationRepository;
+import org.apache.shardingsphere.governance.repository.api.GovernanceRepository;
+import org.apache.shardingsphere.governance.repository.api.RegistryRepository;
+import org.apache.shardingsphere.governance.repository.api.config.GovernanceCenterConfiguration;
+import org.apache.shardingsphere.governance.repository.etcd.EtcdRepository;
+import org.apache.shardingsphere.governance.repository.zookeeper.CuratorZookeeperRepository;
 import org.apache.shardingsphere.ui.common.constant.InstanceType;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
 
@@ -51,20 +53,8 @@ public final class CenterRepositoryFactory {
         if (null != result) {
             return result;
         }
-        InstanceType instanceType = InstanceType.nameOf(config.getInstanceType());
-        switch (instanceType) {
-            case ZOOKEEPER:
-                result = new CuratorZookeeperRepository();
-                break;
-            case ETCD:
-                EtcdRepository etcdCenterRepository = new EtcdRepository();
-                etcdCenterRepository.setProps(new Properties());
-                result = etcdCenterRepository;
-                break;
-            default:
-                throw new UnsupportedOperationException(config.getName());
-        }
-        result.init(config.getName(), convert(config));
+        result = (RegistryRepository) createOrchestrationRepository(config.getInstanceType());
+        result.init(config.getOrchestrationName(), convert(config));
         REGISTRY_REPOSITORY_MAP.put(config.getName(), result);
         return result;
     }
@@ -80,8 +70,32 @@ public final class CenterRepositoryFactory {
         if (null != result) {
             return result;
         }
-        InstanceType instanceType = InstanceType.nameOf(config.getInstanceType());
-        switch (instanceType) {
+        if (!Strings.isNullOrEmpty(config.getAdditionalConfigCenterServerList())
+                && !Strings.isNullOrEmpty(config.getAdditionalConfigCenterType())) {
+            result = (ConfigurationRepository) createOrchestrationRepository(config.getAdditionalConfigCenterType());
+        } else {
+            RegistryRepository registryRepository = (RegistryRepository) createOrchestrationRepository(config.getInstanceType());
+            if (registryRepository instanceof  ConfigurationRepository) {
+                result = (ConfigurationRepository) registryRepository;
+            } else {
+                throw new IllegalArgumentException("Registry repository is not suitable for config center and no additional config center configuration provided.");
+            }
+        }
+        result.init(config.getOrchestrationName(), convert(config));
+        CONFIG_REPOSITORY_MAP.put(config.getName(), result);
+        return result;
+    }
+    
+    private static GovernanceCenterConfiguration convert(final CenterConfig config) {
+        GovernanceCenterConfiguration result = new GovernanceCenterConfiguration(config.getInstanceType(), config.getServerLists(), new Properties());
+        result.getProps().put("digest", config.getDigest());
+        return result;
+    }
+    
+    private static GovernanceRepository createOrchestrationRepository(final String instanceType) {
+        RegistryRepository result;
+        InstanceType type = InstanceType.nameOf(instanceType);
+        switch (type) {
             case ZOOKEEPER:
                 result = new CuratorZookeeperRepository();
                 break;
@@ -91,16 +105,8 @@ public final class CenterRepositoryFactory {
                 result = etcdCenterRepository;
                 break;
             default:
-                throw new UnsupportedOperationException(config.getName());
+                throw new UnsupportedOperationException(instanceType);
         }
-        result.init(config.getName(), convert(config));
-        CONFIG_REPOSITORY_MAP.put(config.getName(), result);
-        return result;
-    }
-    
-    private static OrchestrationCenterConfiguration convert(final CenterConfig config) {
-        OrchestrationCenterConfiguration result = new OrchestrationCenterConfiguration(config.getInstanceType(), config.getServerLists(), new Properties());
-        result.getProps().put("digest", config.getDigest());
         return result;
     }
 }
