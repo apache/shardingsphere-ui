@@ -20,29 +20,20 @@ export default {
     home: 'Home',
     menuData: [
       {
-        title: 'Config Center',
+        title: 'Governance',
         child: [
           {
-            title: 'Config Server',
-            href: '/config-center'
+            title: 'Registry Center',
+            href: '/registry-center'
           },
           {
             title: 'Rule Config',
             href: '/rule-config'
-          }
-        ]
-      },
-      {
-        title: 'Registry Center',
-        child: [
-          {
-            title: 'Registry Server',
-            href: '/registry-center'
           },
           {
             title: 'Runtime Status',
             href: '/runtime-status'
-          }
+          },
         ]
       },
       {
@@ -98,8 +89,10 @@ export default {
       title: 'Add a registry center',
       editTitle: 'Edit registry center',
       name: 'Name',
-      centerType: 'Instance Type',
+      centerType: 'Type',
+      additionalCenterType: 'Additional type',
       address: 'Address',
+      additionalAddress: 'Additional address',
       orchestrationName: 'Orchestration Name',
       namespaces: 'Namespace',
       digest: 'Digest',

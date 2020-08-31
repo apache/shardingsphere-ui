@@ -17,7 +17,6 @@
 
 package org.apache.shardingsphere.ui.web.controller;
 
-import org.apache.shardingsphere.ui.common.constant.OrchestrationType;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
 import org.apache.shardingsphere.ui.common.dto.CenterConfigDTO;
 import org.apache.shardingsphere.ui.servcie.CenterConfigService;
@@ -49,7 +48,7 @@ public final class ConfigCenterController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseResult<List<CenterConfig>> loadConfigs() {
-        return ResponseResultUtil.build(centerConfigService.loadAll(OrchestrationType.CONFIG_CENTER.getValue()).getCenterConfigs());
+        return ResponseResultUtil.build(centerConfigService.loadAll().getCenterConfigs());
     }
     
     /**
@@ -72,7 +71,7 @@ public final class ConfigCenterController {
      */
     @RequestMapping(value = "", method = RequestMethod.DELETE)
     public ResponseResult delete(@RequestBody final CenterConfig config) {
-        centerConfigService.delete(config.getName(), OrchestrationType.CONFIG_CENTER.getValue());
+        centerConfigService.delete(config.getName());
         return ResponseResultUtil.success();
     }
     
@@ -84,8 +83,8 @@ public final class ConfigCenterController {
      */
     @RequestMapping(value = "/connect", method = RequestMethod.POST)
     public ResponseResult<Boolean> connect(@RequestBody final CenterConfig config) {
-        CenterRepositoryFactory.createConfigurationRepository(centerConfigService.load(config.getName(), OrchestrationType.CONFIG_CENTER.getValue()));
-        centerConfigService.setActivated(config.getName(), OrchestrationType.CONFIG_CENTER.getValue());
+        CenterRepositoryFactory.createConfigurationRepository(centerConfigService.load(config.getName()));
+        centerConfigService.setActivated(config.getName());
         return ResponseResultUtil.build(Boolean.TRUE);
     }
     
@@ -96,7 +95,7 @@ public final class ConfigCenterController {
      */
     @RequestMapping(value = "/activated", method = RequestMethod.GET)
     public ResponseResult<CenterConfig> activated() {
-        return ResponseResultUtil.build(centerConfigService.loadActivated(OrchestrationType.CONFIG_CENTER.getValue()).orElse(null));
+        return ResponseResultUtil.build(centerConfigService.loadActivated().orElse(null));
     }
     
     /**

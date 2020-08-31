@@ -17,9 +17,8 @@
 
 package org.apache.shardingsphere.ui.servcie.impl;
 
-import org.apache.shardingsphere.orchestration.core.registry.RegistryCenterNode;
-import org.apache.shardingsphere.orchestration.repository.api.RegistryRepository;
-import org.apache.shardingsphere.ui.common.constant.OrchestrationType;
+import org.apache.shardingsphere.governance.core.registry.RegistryCenterNode;
+import org.apache.shardingsphere.governance.repository.api.RegistryRepository;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
 import org.apache.shardingsphere.ui.common.exception.ShardingSphereUIException;
 import org.apache.shardingsphere.ui.servcie.CenterConfigService;
@@ -41,7 +40,7 @@ public final class RegistryCenterServiceImpl implements RegistryCenterService {
     
     @Override
     public RegistryRepository getActivatedRegistryCenter() {
-        Optional<CenterConfig> optional = centerConfigService.loadActivated(OrchestrationType.REGISTRY_CENTER.getValue());
+        Optional<CenterConfig> optional = centerConfigService.loadActivated();
         if (optional.isPresent()) {
             return CenterRepositoryFactory.createRegistryRepository(optional.get());
         }
@@ -50,7 +49,7 @@ public final class RegistryCenterServiceImpl implements RegistryCenterService {
     
     @Override
     public RegistryCenterNode getActivatedStateNode() {
-        Optional<CenterConfig> optional = centerConfigService.loadActivated(OrchestrationType.REGISTRY_CENTER.getValue());
+        Optional<CenterConfig> optional = centerConfigService.loadActivated();
         if (optional.isPresent()) {
             return new RegistryCenterNode();
         }

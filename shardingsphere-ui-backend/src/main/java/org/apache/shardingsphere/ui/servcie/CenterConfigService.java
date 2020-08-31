@@ -33,18 +33,16 @@ public interface CenterConfigService {
      * Load center config.
      *
      * @param name center config name
-     * @param orchestrationType orchestration type
      * @return center config
      */
-    CenterConfig load(String name, String orchestrationType);
+    CenterConfig load(String name);
     
     /**
      * Load the activated center config.
      *
-     * @param orchestrationType orchestration type
      * @return activated center config
      */
-    Optional<CenterConfig> loadActivated(String orchestrationType);
+    Optional<CenterConfig> loadActivated();
     
     /**
      * Add center config.
@@ -57,17 +55,15 @@ public interface CenterConfigService {
      * Delete center config.
      *
      * @param name center config name
-     * @param orchestrationType orchestration type
      */
-    void delete(String name, String orchestrationType);
+    void delete(String name);
     
     /**
      * Set activated center config.
      *
      * @param name center config name
-     * @param orchestrationType orchestration type
      */
-    void setActivated(String name, String orchestrationType);
+    void setActivated(String name);
     
     /**
      * Load all center configs.
@@ -75,14 +71,6 @@ public interface CenterConfigService {
      * @return all center configs.
      */
     CenterConfigs loadAll();
-    
-    /**
-     * Load all center configs.
-     *
-     * @param orchestrationType orchestration type
-     * @return all center configs.
-     */
-    CenterConfigs loadAll(String orchestrationType);
     
     /**
      * update config center
