@@ -93,7 +93,7 @@ export default {
       additionalCenterType: '扩展配置中心类型',
       additionalAddress: '扩展配置中心地址',
       address: '注册中心地址',
-      orchestrationName: '数据治理实例',
+      orchestrationName: '治理实例名称',
       namespaces: '命名空间',
       digest: '登录凭证',
       btnConfirmTxt: '确定',

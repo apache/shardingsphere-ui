@@ -214,7 +214,7 @@ export default {
   computed: {
     textarea2() {
       const dsYamlType = new yaml.Type(
-        'tag:yaml.org,2002:org.apache.shardingsphere.orchestration.core.common.yaml.config.YamlDataSourceConfiguration',
+        'tag:yaml.org,2002:org.apache.shardingsphere.governance.core.common.yaml.config.YamlDataSourceConfiguration',
         {
           kind: 'mapping',
           construct(data) {

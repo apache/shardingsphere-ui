@@ -98,6 +98,13 @@
         <el-form-item :label="$t('registryCenter.registDialog.name')" prop="name">
           <el-input :placeholder="$t('registryCenter.rules.name')" v-model="form.name" autocomplete="off" />
         </el-form-item>
+        <el-form-item :label="$t('registryCenter.registDialog.orchestrationName')" prop="orchestrationName">
+          <el-input
+            :placeholder="$t('registryCenter.rules.orchestrationName')"
+            v-model="form.orchestrationName"
+            autocomplete="off"
+          />
+        </el-form-item>
         <el-form-item :label="$t('registryCenter.registDialog.centerType')" prop="instanceType">
           <el-radio-group v-model="form.instanceType">
             <el-radio label="Zookeeper">Zookeeper</el-radio>
@@ -111,10 +118,10 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.orchestrationName')" prop="orchestrationName">
+        <el-form-item :label="$t('registryCenter.registDialog.digest')" id="add-digest" v-show="showAddDigest">
           <el-input
-            :placeholder="$t('registryCenter.rules.orchestrationName')"
-            v-model="form.orchestrationName"
+            :placeholder="$t('registryCenter.rules.digest')"
+            v-model="form.digest"
             autocomplete="off"
           />
         </el-form-item>
@@ -131,7 +138,7 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.digest')">
+        <el-form-item :label="$t('registryCenter.registDialog.digest')" id="add-digest-additional" v-show="showAddDigestAdditional">
           <el-input
             :placeholder="$t('registryCenter.rules.digest')"
             v-model="form.additionalDigest"
@@ -156,6 +163,13 @@
         <el-form-item :label="$t('registryCenter.registDialog.name')" prop="name">
           <el-input :placeholder="$t('registryCenter.rules.name')" v-model="editForm.name" autocomplete="off" />
         </el-form-item>
+        <el-form-item :label="$t('registryCenter.registDialog.orchestrationName')" prop="orchestrationName">
+          <el-input
+            :placeholder="$t('registryCenter.rules.orchestrationName')"
+            v-model="editForm.orchestrationName"
+            autocomplete="off"
+          />
+        </el-form-item>
         <el-form-item :label="$t('registryCenter.registDialog.centerType')" prop="instanceType">
           <el-radio-group v-model="editForm.instanceType">
             <el-radio label="Zookeeper">Zookeeper</el-radio>
@@ -169,14 +183,7 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.orchestrationName')" prop="orchestrationName">
-          <el-input
-            :placeholder="$t('registryCenter.rules.orchestrationName')"
-            v-model="editForm.orchestrationName"
-            autocomplete="off"
-          />
-        </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.digest')">
+        <el-form-item :label="$t('registryCenter.registDialog.digest')" v-show="showEditDigest">
           <el-input
             :placeholder="$t('registryCenter.rules.digest')"
             v-model="editForm.digest"
@@ -196,7 +203,7 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.digest')">
+        <el-form-item :label="$t('registryCenter.registDialog.digest')" v-show="showEditDigestAdditional">
           <el-input
             :placeholder="$t('registryCenter.rules.digest')"
             v-model="editForm.additionalDigest"
@@ -224,6 +231,10 @@ export default {
     return {
       regustDialogVisible: false,
       editDialogVisible: false,
+      showAddDigest:true,
+      showAddDigestAdditional:true,
+      showEditDigest:true,
+      showEditDigestAdditional:true,
       column: [
         {
           label: this.$t('registryCenter').registDialog.name,
@@ -418,6 +429,38 @@ export default {
     },
     cancelEdit() {
       this.editDialogVisible = false
+    },
+    centerTypeChanged(value) {
+      if (value === 'Zookeeper') {
+        this.showAddDigest = true
+      } else {
+        this.showAddDigest = false
+        this.form.digest = '';
+      }
+    },
+    additionalCenterTypeChanged(value) {
+      if (value === 'Zookeeper') {
+        this.showAddDigestAdditional = true
+      } else {
+        this.showAddDigestAdditional = false
+        this.form.additionalDigest = '';
+      }
+    },
+    editCenterTypeChanged(value) {
+      if (value === 'Zookeeper') {
+        this.showEditDigest = true
+      } else {
+        this.showEditDigest = false
+        this.editForm.digest = '';
+      }
+    },
+    editAdditionalCenterTypeChanged(value) {
+      if (value === 'Zookeeper') {
+        this.showEditDigestAdditional = true
+      } else {
+        this.showEditDigestAdditional = false
+        this.editForm.additionalDigest = '';
+      }
     }
   }
 }
