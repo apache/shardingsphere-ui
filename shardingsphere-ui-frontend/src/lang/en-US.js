@@ -90,10 +90,10 @@ export default {
       editTitle: 'Edit registry center',
       name: 'Name',
       centerType: 'Type',
-      additionalCenterType: 'Additional type',
+      additionalCenterType: 'Additional Type',
       address: 'Address',
-      additionalAddress: 'Additional address',
-      orchestrationName: 'Orchestration Name',
+      additionalAddress: 'Additional Address',
+      orchestrationName: 'Governance Name',
       namespaces: 'Namespace',
       digest: 'Digest',
       btnConfirmTxt: 'Confirm',
@@ -111,7 +111,7 @@ export default {
       address: 'Please enter the registration center Address',
       namespaces: 'Please enter a Namespace',
       centerType: 'Please select a Center Type',
-      orchestrationName: 'Please enter a Orchestration Name',
+      orchestrationName: 'Please enter a Governance Name',
       digest: 'Please enter a digest'
     }
   },
@@ -123,7 +123,7 @@ export default {
       name: 'Name',
       centerType: 'Instance Type',
       address: 'Address',
-      orchestrationName: 'Orchestration Name',
+      orchestrationName: 'Governance Name',
       namespaces: 'Namespace',
       digest: 'Digest',
       btnConfirmTxt: 'Confirm',
@@ -141,7 +141,7 @@ export default {
       address: 'Please enter the config center Address',
       namespaces: 'Please enter a Namespace',
       centerType: 'Please select a Center Type',
-      orchestrationName: 'Please enter a Orchestration Name',
+      orchestrationName: 'Please enter a Governance Name',
       digest: 'Please enter a digest'
     }
   },

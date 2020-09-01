@@ -17,6 +17,7 @@
 
 package org.apache.shardingsphere.ui.servcie.impl;
 
+import com.google.common.base.Joiner;
 import org.apache.shardingsphere.governance.core.registry.RegistryCenterNodeStatus;
 import org.apache.shardingsphere.infra.config.RuleConfiguration;
 import org.apache.shardingsphere.masterslave.api.config.MasterSlaveRuleConfiguration;
@@ -82,7 +83,7 @@ public final class OrchestrationServiceImpl implements OrchestrationService {
     @Override
     public void updateSlaveDataSourceStatus(final String schemaNames, final String slaveDataSourceName, final boolean enabled) {
         String value = enabled ? "" : RegistryCenterNodeStatus.DISABLED.toString();
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getDataSourcesNodeFullPath(schemaNames + "." + slaveDataSourceName), value);
+        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getDataSourcesNodeDataSourcePath(schemaNames, slaveDataSourceName), value);
     }
     
     private String getInstancesNodeFullRootPath() {
@@ -121,11 +122,14 @@ public final class OrchestrationServiceImpl implements OrchestrationService {
     
     private Collection<String> getDisabledSchemaDataSourceNames() {
         List<String> result = new ArrayList<>();
-        List<String> schemaDataSourceNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getDataSourcesNodeFullRootPath());
-        for (String schemaDataSourceName : schemaDataSourceNames) {
-            String value = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getDataSourcesNodeFullPath(schemaDataSourceName));
-            if (RegistryCenterNodeStatus.DISABLED.toString().equalsIgnoreCase(value)) {
-                result.add(schemaDataSourceName);
+        List<String> schemaNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getDataSourcesNodeFullRootPath());
+        for (String schemaName : schemaNames) {
+            List<String> dataSourceNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getDataSourcesNodeSchemaPath(schemaName));
+            for (String dataSourceName : dataSourceNames) {
+                String value = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getDataSourcesNodeDataSourcePath(schemaName, dataSourceName));
+                if (RegistryCenterNodeStatus.DISABLED.toString().equalsIgnoreCase(value)) {
+                    result.add(Joiner.on(".").join(schemaName, dataSourceName));
+                }
             }
         }
         return result;

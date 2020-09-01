@@ -493,7 +493,7 @@ export default {
   computed: {
     textareaDatasourceCom() {
       const dsYamlType = new yaml.Type(
-        'tag:yaml.org,2002:org.apache.shardingsphere.orchestration.core.common.configuration.YamlDataSourceConfiguration',
+        'tag:yaml.org,2002:org.apache.shardingsphere.governance.core.common.yaml.config.YamlDataSourceConfiguration',
         {
           kind: 'mapping',
           construct(data) {
@@ -510,7 +510,7 @@ export default {
     },
     textareaRuleCom() {
       const dsYamlType = new yaml.Type(
-        'tag:yaml.org,2002:org.apache.shardingsphere.orchestration.core.common.configuration.YamlDataSourceConfiguration',
+        'tag:yaml.org,2002:org.apache.shardingsphere.governance.core.common.yaml.config.YamlDataSourceConfiguration',
         {
           kind: 'mapping',
           construct(data) {

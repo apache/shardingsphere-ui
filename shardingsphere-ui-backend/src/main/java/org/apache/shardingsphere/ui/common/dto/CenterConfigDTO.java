@@ -42,4 +42,10 @@ public final class CenterConfigDTO {
     private String digest;
     
     private String primaryName;
+    
+    private String additionalConfigCenterType;
+    
+    private String additionalConfigCenterServerList;
+    
+    private String additionalDigest;
 }
