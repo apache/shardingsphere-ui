@@ -20,7 +20,7 @@ package org.apache.shardingsphere.ui.common.constant;
 import org.apache.shardingsphere.ui.common.exception.ShardingSphereUIException;
 
 /**
- * Orchestration instance type.
+ * Governance instance type.
  */
 public enum InstanceType {
     
@@ -44,6 +44,6 @@ public enum InstanceType {
                 return each;
             }
         }
-        throw new ShardingSphereUIException(ShardingSphereUIException.SERVER_ERROR, String.format("Unsupported orchestration instance type `%s`", name));
+        throw new ShardingSphereUIException(ShardingSphereUIException.SERVER_ERROR, String.format("Unsupported governance instance type `%s`", name));
     }
 }

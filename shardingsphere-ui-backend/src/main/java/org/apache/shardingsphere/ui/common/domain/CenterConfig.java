@@ -35,7 +35,7 @@ public final class CenterConfig {
     
     private String serverLists;
     
-    private String orchestrationName;
+    private String governanceName;
     
     private String digest;
     

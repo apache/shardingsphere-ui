@@ -35,9 +35,9 @@ public final class CenterConfigDTO {
     
     private String namespace;
     
-    private String orchestrationName;
+    private String governanceName;
     
-    private String orchestrationType;
+    private String governanceType;
     
     private String digest;
     

@@ -62,9 +62,11 @@ curl -X GET http://localhost:8088/api/reg-center
 | name               | String     | Name of Registration Center                 |
 | registryCenterType | String     | Registry type: "zookeeper" / "etcd"         |
 | serverLists        | String     | Service address of Registration Center      |
-| namespace          | String     | Namespace of the registry                   |
-| orchestrationName  | String     | Data governance instance name               |
+| governanceName  | String     | Governance instance name               |
 | digest             | String     | Permission token to connect to the registry |
+| additionalConfigCenterType | String     | Additional config center type: "zookeeper" / "etcd"         |
+| additionalConfigCenterServerList        | String     | Service address of additional config center      |
+| additionalDigest             | String     | Permission token to connect to the additional config center |
 | activated          | Boolean    | Is it active                                |
 
 ```
@@ -77,18 +79,22 @@ curl -X GET http://localhost:8088/api/reg-center
       "name": "string",
       "registryCenterType": "Zookeeper",
       "serverLists": "string",
-      "namespace": "string",
-      "orchestrationName": "string",
+      "governanceName": "string",
       "digest": "string",
+      "additionalConfigCenterType": "Zookeeper",
+      "additionalConfigCenterServerList": "string",
+      "additionalDigest": "string",
       "activated": true
     },
     {
       "name": "string",
       "registryCenterType": "Etcd",
       "serverLists": "string",
-      "namespace": "string",
-      "orchestrationName": "string",
+      "governanceName": "string",
       "digest": "string",
+      "additionalConfigCenterType": "Zookeeper",
+      "additionalConfigCenterServerList": "string",
+      "additionalDigest": "string",
       "activated": false
     }
   ]
@@ -110,19 +116,22 @@ curl -X POST http://localhost:8088/api/reg-center
 | Parameter          | Field type | Essential | Describe                                    |
 | ------------------ | ---------- | --------- | ------------------------------------------- |
 | name               | String     | Y         | Name of Registration Center                 |
+| governanceName  | String     | Y         | Data governance instance name               |
 | registryCenterType | String     | Y         | Registry type: "zookeeper" / "etcd"         |
 | serverLists        | String     | Y         | Service address of Registration Center      |
-| namespace          | String     | Y         | Namespace of the registry                   |
-| orchestrationName  | String     | Y         | Data governance instance name               |
 | digest             | String     | N         | Permission token to connect to the registry |
+| additionalConfigCenterType | String     | N         | Additional config center type: "zookeeper" / "etcd"         |
+| additionalConfigCenterServerList        | String     | N         | Service address of additional config center      |
+| additionalDigest             | String     | N         | Permission token to connect to the additional config center |
 
 ```
 {
   "name": "string",
-  "namespace": "string",
-  "orchestrationName": "string",
+  "governanceName": "string",
   "registryCenterType": "Zookeeper",
   "serverLists": "string"
+  "additionalConfigCenterType": "Zookeeper",
+  "additionalConfigCenterServerList": "string"
 }
 ```
 
@@ -210,9 +219,11 @@ GET /api/reg-center/activated
 | name               | String     | Name of Registration Center                 |
 | registryCenterType | String     | Registry type: "zookeeper" / "etcd"         |
 | serverLists        | String     | Service address of Registration Center      |
-| namespace          | String     | Namespace of the registry                   |
-| orchestrationName  | String     | Data governance instance name               |
+| governanceName     | String     | Data governance instance name               |
 | digest             | String     | Permission token to connect to the registry |
+| additionalConfigCenterType | String     | Additional config center type: "zookeeper" / "etcd"         |
+| additionalConfigCenterServerList        | String     | Service address of additional config center      |
+| additionalDigest             | String     | Permission token to connect to the additional config center |
 | activated          | Boolean    | Is it active                                |
 
 ```
@@ -224,9 +235,11 @@ GET /api/reg-center/activated
     "name": "string",
     "registryCenterType": "Zookeeper",
     "serverLists": "string",
-    "namespace": "string",
-    "orchestrationName": "string",
+    "governanceName": "string",
     "digest": "string",
+    "additionalConfigCenterType": "Zookeeper",
+    "additionalConfigCenterServerList": "string",
+    "additionalDigest": "string",
     "activated": true
   }
 }
@@ -534,7 +547,7 @@ GET /api/reg-center/activated
 
 ### 7.1 Get running instance information
 
-`GET /api/orchestration/instance`
+`GET /api/governance/instance`
 
 #### Request
 
@@ -564,7 +577,7 @@ _Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java
 
 ### 7.2 Modify running instance status
 
-`PUT /api/orchestration/instance`
+`PUT /api/governance/instance`
 
 #### Request
 
@@ -591,7 +604,7 @@ _Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java
 
 ### 7.3 Get from library information
 
-`GET /api/orchestration/datasource`
+`GET /api/governance/datasource`
 
 #### Request
 
@@ -635,7 +648,7 @@ _Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java
 
 ### 7.4 Modify slave status
 
-`PUT /api/orchestration/datasource`
+`PUT /api/governance/datasource`
 
 #### Request
 

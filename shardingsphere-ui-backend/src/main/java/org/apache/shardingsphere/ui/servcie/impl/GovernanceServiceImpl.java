@@ -24,7 +24,7 @@ import org.apache.shardingsphere.masterslave.api.config.MasterSlaveRuleConfigura
 import org.apache.shardingsphere.masterslave.api.config.rule.MasterSlaveDataSourceRuleConfiguration;
 import org.apache.shardingsphere.ui.common.dto.InstanceDTO;
 import org.apache.shardingsphere.ui.common.dto.SlaveDataSourceDTO;
-import org.apache.shardingsphere.ui.servcie.OrchestrationService;
+import org.apache.shardingsphere.ui.servcie.GovernanceService;
 import org.apache.shardingsphere.ui.servcie.RegistryCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingSchemaService;
 import org.apache.shardingsphere.ui.util.ConfigurationYamlConverter;
@@ -38,10 +38,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Implementation of orchestration operation service.
+ * Implementation of governance operation service.
  */
 @Service
-public final class OrchestrationServiceImpl implements OrchestrationService {
+public final class GovernanceServiceImpl implements GovernanceService {
     
     @Resource
     private RegistryCenterService registryCenterService;

@@ -98,10 +98,10 @@
         <el-form-item :label="$t('registryCenter.registDialog.name')" prop="name">
           <el-input :placeholder="$t('registryCenter.rules.name')" v-model="form.name" autocomplete="off" />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.orchestrationName')" prop="orchestrationName">
+        <el-form-item :label="$t('registryCenter.registDialog.governanceName')" prop="governanceName">
           <el-input
-            :placeholder="$t('registryCenter.rules.orchestrationName')"
-            v-model="form.orchestrationName"
+            :placeholder="$t('registryCenter.rules.governanceName')"
+            v-model="form.governanceName"
             autocomplete="off"
           />
         </el-form-item>
@@ -163,10 +163,10 @@
         <el-form-item :label="$t('registryCenter.registDialog.name')" prop="name">
           <el-input :placeholder="$t('registryCenter.rules.name')" v-model="editForm.name" autocomplete="off" />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.orchestrationName')" prop="orchestrationName">
+        <el-form-item :label="$t('registryCenter.registDialog.governanceName')" prop="governanceName">
           <el-input
-            :placeholder="$t('registryCenter.rules.orchestrationName')"
-            v-model="editForm.orchestrationName"
+            :placeholder="$t('registryCenter.rules.governanceName')"
+            v-model="editForm.governanceName"
             autocomplete="off"
           />
         </el-form-item>
@@ -241,16 +241,16 @@ export default {
           prop: 'name'
         },
         {
+          label: this.$t('registryCenter').registDialog.governanceName,
+          prop: 'governanceName'
+        },
+        {
           label: this.$t('registryCenter').registDialog.centerType,
           prop: 'instanceType'
         },
         {
           label: this.$t('registryCenter').registDialog.address,
           prop: 'serverLists'
-        },
-        {
-          label: this.$t('registryCenter').registDialog.orchestrationName,
-          prop: 'orchestrationName'
         },
         {
           label: this.$t('registryCenter').registDialog.additionalCenterType,
@@ -265,7 +265,7 @@ export default {
         name: '',
         serverLists: '',
         instanceType: 'Zookeeper',
-        orchestrationName: '',
+        governanceName: '',
         digest: '',
         additionalConfigCenterType: '',
         additionalConfigCenterServerList: '',
@@ -276,7 +276,7 @@ export default {
         name: '',
         serverLists: '',
         instanceType: 'Zookeeper',
-        orchestrationName: '',
+        governanceName: '',
         digest: '',
         additionalConfigCenterType: '',
         additionalConfigCenterServerList: '',
@@ -311,10 +311,10 @@ export default {
             trigger: 'change'
           }
         ],
-        orchestrationName: [
+        governanceName: [
           {
             required: true,
-            message: this.$t('registryCenter').rules.orchestrationName,
+            message: this.$t('registryCenter').rules.governanceName,
             trigger: 'change'
           }
         ]
