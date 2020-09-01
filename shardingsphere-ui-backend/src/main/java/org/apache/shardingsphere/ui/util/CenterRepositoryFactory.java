@@ -53,8 +53,8 @@ public final class CenterRepositoryFactory {
         if (null != result) {
             return result;
         }
-        result = (RegistryRepository) createOrchestrationRepository(config.getInstanceType());
-        result.init(config.getOrchestrationName(), convert(config));
+        result = (RegistryRepository) createGovernanceRepository(config.getInstanceType());
+        result.init(config.getGovernanceName(), convert(config));
         REGISTRY_REPOSITORY_MAP.put(config.getName(), result);
         return result;
     }
@@ -72,16 +72,16 @@ public final class CenterRepositoryFactory {
         }
         if (!Strings.isNullOrEmpty(config.getAdditionalConfigCenterServerList())
                 && !Strings.isNullOrEmpty(config.getAdditionalConfigCenterType())) {
-            result = (ConfigurationRepository) createOrchestrationRepository(config.getAdditionalConfigCenterType());
+            result = (ConfigurationRepository) createGovernanceRepository(config.getAdditionalConfigCenterType());
         } else {
-            RegistryRepository registryRepository = (RegistryRepository) createOrchestrationRepository(config.getInstanceType());
+            RegistryRepository registryRepository = (RegistryRepository) createGovernanceRepository(config.getInstanceType());
             if (registryRepository instanceof  ConfigurationRepository) {
                 result = (ConfigurationRepository) registryRepository;
             } else {
                 throw new IllegalArgumentException("Registry repository is not suitable for config center and no additional config center configuration provided.");
             }
         }
-        result.init(config.getOrchestrationName(), convert(config));
+        result.init(config.getGovernanceName(), convert(config));
         CONFIG_REPOSITORY_MAP.put(config.getName(), result);
         return result;
     }
@@ -92,7 +92,7 @@ public final class CenterRepositoryFactory {
         return result;
     }
     
-    private static GovernanceRepository createOrchestrationRepository(final String instanceType) {
+    private static GovernanceRepository createGovernanceRepository(final String instanceType) {
         RegistryRepository result;
         InstanceType type = InstanceType.nameOf(instanceType);
         switch (type) {

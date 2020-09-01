@@ -104,7 +104,7 @@ public final class CenterConfigServiceImpl implements CenterConfigService {
             toBeUpdatedConfig.setName(config.getName());
             toBeUpdatedConfig.setInstanceType(config.getInstanceType());
             toBeUpdatedConfig.setServerLists(config.getServerLists());
-            toBeUpdatedConfig.setOrchestrationName(config.getOrchestrationName());
+            toBeUpdatedConfig.setGovernanceName(config.getGovernanceName());
             toBeUpdatedConfig.setDigest(config.getDigest());
             toBeUpdatedConfig.setAdditionalConfigCenterServerList(config.getAdditionalConfigCenterServerList());
             toBeUpdatedConfig.setAdditionalConfigCenterType(config.getAdditionalConfigCenterType());

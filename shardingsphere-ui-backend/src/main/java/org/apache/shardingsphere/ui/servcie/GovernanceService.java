@@ -23,9 +23,9 @@ import org.apache.shardingsphere.ui.common.dto.SlaveDataSourceDTO;
 import java.util.Collection;
 
 /**
- * Orchestration operation service.
+ * Governance operation service.
  */
-public interface OrchestrationService {
+public interface GovernanceService {
     
     /**
      * Get all instances.

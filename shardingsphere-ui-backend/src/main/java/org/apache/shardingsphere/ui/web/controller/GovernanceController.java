@@ -19,7 +19,7 @@ package org.apache.shardingsphere.ui.web.controller;
 
 import org.apache.shardingsphere.ui.common.dto.InstanceDTO;
 import org.apache.shardingsphere.ui.common.dto.SlaveDataSourceDTO;
-import org.apache.shardingsphere.ui.servcie.OrchestrationService;
+import org.apache.shardingsphere.ui.servcie.GovernanceService;
 import org.apache.shardingsphere.ui.web.response.ResponseResult;
 import org.apache.shardingsphere.ui.web.response.ResponseResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 /**
- * RESTful API of orchestration operation.
+ * RESTful API of governance operation.
  */
 @RestController
-@RequestMapping("/api/orchestration")
-public final class OrchestrationController {
+@RequestMapping("/api/governance")
+public final class GovernanceController {
     
     @Autowired
-    private OrchestrationService orchestrationService;
+    private GovernanceService governanceService;
     
     /**
      * Load all instances.
@@ -47,7 +47,7 @@ public final class OrchestrationController {
      */
     @RequestMapping(value = "/instance", method = RequestMethod.GET)
     public ResponseResult<Collection<InstanceDTO>> loadAllInstances() {
-        return ResponseResultUtil.build(orchestrationService.getALLInstance());
+        return ResponseResultUtil.build(governanceService.getALLInstance());
     }
     
     /**
@@ -58,7 +58,7 @@ public final class OrchestrationController {
      */
     @RequestMapping(value = "/instance", method = RequestMethod.PUT)
     public ResponseResult updateInstanceStatus(@RequestBody final InstanceDTO instanceDTO) {
-        orchestrationService.updateInstanceStatus(instanceDTO.getInstanceId(), instanceDTO.isEnabled());
+        governanceService.updateInstanceStatus(instanceDTO.getInstanceId(), instanceDTO.isEnabled());
         return ResponseResultUtil.success();
     }
     
@@ -69,7 +69,7 @@ public final class OrchestrationController {
      */
     @RequestMapping(value = "/datasource", method = RequestMethod.GET)
     public ResponseResult<Collection<SlaveDataSourceDTO>> loadAllSlaveDataSources() {
-        return ResponseResultUtil.build(orchestrationService.getAllSlaveDataSource());
+        return ResponseResultUtil.build(governanceService.getAllSlaveDataSource());
     }
     
     /**
@@ -80,7 +80,7 @@ public final class OrchestrationController {
      */
     @RequestMapping(value = "/datasource", method = RequestMethod.PUT)
     public ResponseResult updateSlaveDataSourceStatus(@RequestBody final SlaveDataSourceDTO slaveDataSourceDTO) {
-        orchestrationService.updateSlaveDataSourceStatus(slaveDataSourceDTO.getSchema(), slaveDataSourceDTO.getSlaveDataSourceName(), slaveDataSourceDTO.isEnabled());
+        governanceService.updateSlaveDataSourceStatus(slaveDataSourceDTO.getSchema(), slaveDataSourceDTO.getSlaveDataSourceName(), slaveDataSourceDTO.isEnabled());
         return ResponseResultUtil.success();
     }
     

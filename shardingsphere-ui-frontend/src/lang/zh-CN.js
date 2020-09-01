@@ -93,7 +93,7 @@ export default {
       additionalCenterType: '扩展配置中心类型',
       additionalAddress: '扩展配置中心地址',
       address: '注册中心地址',
-      orchestrationName: '治理实例名称',
+      governanceName: '治理实例名称',
       namespaces: '命名空间',
       digest: '登录凭证',
       btnConfirmTxt: '确定',
@@ -111,37 +111,7 @@ export default {
       centerType: '请选择注册中心类型',
       namespaces: '请输入命名空间',
       address: '请输入注册中心地址',
-      orchestrationName: '请输入数据治理实例名称',
-      digest: '请输入登录凭证'
-    }
-  },
-  configCenter: {
-    btnTxt: '添加',
-    configDialog: {
-      title: '添加配置中心',
-      editTitle: '编辑配置中心',
-      name: '配置中心名称',
-      centerType: '配置中心类型',
-      address: '配置中心地址',
-      orchestrationName: '数据治理实例',
-      namespaces: '命名空间',
-      digest: '登录凭证',
-      btnConfirmTxt: '确定',
-      btnCancelTxt: '取消'
-    },
-    table: {
-      operate: '操作',
-      operateConnect: '连接',
-      operateConnected: '已激活',
-      operateDel: '删除',
-      operateEdit: '编辑'
-    },
-    rules: {
-      name: '请输入配置中心名称',
-      centerType: '请选择配置中心类型',
-      namespaces: '请输入命名空间',
-      address: '请输入配置中心地址',
-      orchestrationName: '请输入数据治理实例名称',
+      governanceName: '请输入治理实例名称',
       digest: '请输入登录凭证'
     }
   },

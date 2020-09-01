@@ -93,7 +93,7 @@ export default {
       additionalCenterType: 'Additional Type',
       address: 'Address',
       additionalAddress: 'Additional Address',
-      orchestrationName: 'Governance Name',
+      governanceName: 'Governance Name',
       namespaces: 'Namespace',
       digest: 'Digest',
       btnConfirmTxt: 'Confirm',
@@ -111,37 +111,7 @@ export default {
       address: 'Please enter the registration center Address',
       namespaces: 'Please enter a Namespace',
       centerType: 'Please select a Center Type',
-      orchestrationName: 'Please enter a Governance Name',
-      digest: 'Please enter a digest'
-    }
-  },
-  configCenter: {
-    btnTxt: 'ADD',
-    configDialog: {
-      title: 'Add a config center',
-      editTitle: 'Edit config center',
-      name: 'Name',
-      centerType: 'Instance Type',
-      address: 'Address',
-      orchestrationName: 'Governance Name',
-      namespaces: 'Namespace',
-      digest: 'Digest',
-      btnConfirmTxt: 'Confirm',
-      btnCancelTxt: 'Cancel'
-    },
-    table: {
-      operate: 'Operate',
-      operateConnect: 'Connect',
-      operateConnected: 'Connected',
-      operateDel: 'Del',
-      operateEdit: 'Edit'
-    },
-    rules: {
-      name: 'Please enter the name of the config center',
-      address: 'Please enter the config center Address',
-      namespaces: 'Please enter a Namespace',
-      centerType: 'Please select a Center Type',
-      orchestrationName: 'Please enter a Governance Name',
+      governanceName: 'Please enter a Governance Name',
       digest: 'Please enter a digest'
     }
   },
