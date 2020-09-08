@@ -492,16 +492,7 @@ export default {
   },
   computed: {
     textareaDatasourceCom() {
-      const dsYamlType = new yaml.Type(
-        'tag:yaml.org,2002:org.apache.shardingsphere.governance.core.common.yaml.config.YamlDataSourceConfiguration',
-        {
-          kind: 'mapping',
-          construct(data) {
-            return data !== null ? data : {}
-          }
-        }
-      )
-      const DS_SCHEMA = yaml.Schema.create(dsYamlType)
+      const DS_SCHEMA = yaml.Schema.create()
       return JSON.stringify(
         yaml.load(this.textareaDatasource, { schema: DS_SCHEMA }),
         null,
@@ -509,15 +500,6 @@ export default {
       )
     },
     textareaRuleCom() {
-      const dsYamlType = new yaml.Type(
-        'tag:yaml.org,2002:org.apache.shardingsphere.governance.core.common.yaml.config.YamlDataSourceConfiguration',
-        {
-          kind: 'mapping',
-          construct(data) {
-            return data !== null ? data : {}
-          }
-        }
-      )
       const shardingYamlType = new yaml.Type(
         '!SHARDING',
         {
@@ -554,7 +536,7 @@ export default {
           }
         }
       )
-      const DS_SCHEMA = yaml.Schema.create([dsYamlType, shardingYamlType, encryptYamlType, masterSlaveYamlType, shadowYamlType])
+      const DS_SCHEMA = yaml.Schema.create([shardingYamlType, encryptYamlType, masterSlaveYamlType, shadowYamlType])
       return JSON.stringify(
         yaml.load(this.textareaRule, { schema: DS_SCHEMA }),
         null,
