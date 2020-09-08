@@ -213,15 +213,6 @@ export default {
   },
   computed: {
     textarea2() {
-      const dsYamlType = new yaml.Type(
-        'tag:yaml.org,2002:org.apache.shardingsphere.governance.core.common.yaml.config.YamlDataSourceConfiguration',
-        {
-          kind: 'mapping',
-          construct(data) {
-            return data !== null ? data : {}
-          }
-        }
-      )
       const shardingYamlType = new yaml.Type(
         '!SHARDING',
         {
@@ -258,7 +249,7 @@ export default {
           }
         }
       )
-      const DS_SCHEMA = yaml.Schema.create([dsYamlType, shardingYamlType, encryptYamlType, masterSlaveYamlType, shadowYamlType])
+      const DS_SCHEMA = yaml.Schema.create([shardingYamlType, encryptYamlType, masterSlaveYamlType, shadowYamlType])
       return JSON.stringify(
         yaml.load(this.textarea, { schema: DS_SCHEMA }),
         null,
