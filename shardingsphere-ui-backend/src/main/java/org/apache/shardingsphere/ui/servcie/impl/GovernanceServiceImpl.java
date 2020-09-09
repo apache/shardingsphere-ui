@@ -54,7 +54,7 @@ public final class GovernanceServiceImpl implements GovernanceService {
         List<String> instanceIds = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(getInstancesNodeFullRootPath());
         Collection<InstanceDTO> result = new ArrayList<>(instanceIds.size());
         for (String instanceId : instanceIds) {
-            String value = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getInstancesNodeFullPath(instanceId));
+            String value = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getProxyNodePath(instanceId));
             result.add(new InstanceDTO(instanceId, !RegistryCenterNodeStatus.DISABLED.toString().equalsIgnoreCase(value)));
         }
         return result;
@@ -63,7 +63,7 @@ public final class GovernanceServiceImpl implements GovernanceService {
     @Override
     public void updateInstanceStatus(final String instanceId, final boolean enabled) {
         String value = enabled ? "" : RegistryCenterNodeStatus.DISABLED.toString();
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getInstancesNodeFullPath(instanceId), value);
+        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getProxyNodePath(instanceId), value);
     }
     
     @Override
@@ -83,11 +83,11 @@ public final class GovernanceServiceImpl implements GovernanceService {
     @Override
     public void updateSlaveDataSourceStatus(final String schemaNames, final String slaveDataSourceName, final boolean enabled) {
         String value = enabled ? "" : RegistryCenterNodeStatus.DISABLED.toString();
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getDataSourcesNodeDataSourcePath(schemaNames, slaveDataSourceName), value);
+        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getDataSourcePath(schemaNames, slaveDataSourceName), value);
     }
     
     private String getInstancesNodeFullRootPath() {
-        String result = registryCenterService.getActivatedStateNode().getInstancesNodeFullPath("");
+        String result = registryCenterService.getActivatedStateNode().getProxyNodePath("");
         return result.substring(0, result.length() - 1);
     }
     
@@ -122,11 +122,11 @@ public final class GovernanceServiceImpl implements GovernanceService {
     
     private Collection<String> getDisabledSchemaDataSourceNames() {
         List<String> result = new ArrayList<>();
-        List<String> schemaNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getDataSourcesNodeFullRootPath());
+        List<String> schemaNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getDataNodesPath());
         for (String schemaName : schemaNames) {
-            List<String> dataSourceNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getDataSourcesNodeSchemaPath(schemaName));
+            List<String> dataSourceNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getSchemaPath(schemaName));
             for (String dataSourceName : dataSourceNames) {
-                String value = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getDataSourcesNodeDataSourcePath(schemaName, dataSourceName));
+                String value = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getDataSourcePath(schemaName, dataSourceName));
                 if (RegistryCenterNodeStatus.DISABLED.toString().equalsIgnoreCase(value)) {
                     result.add(Joiner.on(".").join(schemaName, dataSourceName));
                 }
