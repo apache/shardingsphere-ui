@@ -36,5 +36,4 @@ public final class ShardingSphereSchemaDTO {
     private String ruleConfiguration;
     
     private String dataSourceConfiguration;
-    
 }

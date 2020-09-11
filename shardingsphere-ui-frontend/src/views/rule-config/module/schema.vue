@@ -122,17 +122,6 @@
             class="edit-text"
           />
         </el-form-item>
-        <el-form-item :label="$t('ruleConfig.schema.metadataConfig')" prop="metadataConfig">
-          <el-input
-            :placeholder="$t('ruleConfig.schemaRules.metadataConfig')"
-            :rows="8"
-            v-model="form.metadataConfig"
-            autocomplete="off"
-            type="string"
-            readonly
-            class="edit-text"
-          />
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addSchemaDialogVisible = false">{{ $t('btn.cancel') }}</el-button>
@@ -176,8 +165,7 @@ export default {
       form: {
         name: '',
         ruleConfig: '',
-        dataSourceConfig: '',
-        metadataConfig: ''
+        dataSourceConfig: ''
       },
       rules: {
         name: [
