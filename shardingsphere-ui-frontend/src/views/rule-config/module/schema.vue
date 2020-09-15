@@ -43,14 +43,13 @@
     <el-row>
       <el-button type="primary" icon="el-icon-plus" @click="add" />
     </el-row>
-    <el-dialog :visible.sync="showMetadataDialogVisible" :title="type" width="80%" top="3vh">
+    <el-dialog :visible.sync="showMetadataDialogVisible" :title="type" width="60%" top="3vh">
       <el-row :gutter="20">
         <el-col :span="24">
-          <span style="font-size: 18px; font-weight: bold;">Result (JS object dump):</span>
           <el-input
             :rows="20"
             :placeholder="$t('ruleConfig.form.inputPlaceholder')"
-            v-model="textarea2"
+            v-model="textarea"
             type="textarea"
             readonly
             class="show-text"
@@ -61,27 +60,15 @@
         <el-button @click="showMetadataDialogVisible = false">{{ $t('btn.cancel') }}</el-button>
       </span>
     </el-dialog>
-    <el-dialog :visible.sync="centerDialogVisible" :title="type" width="80%" top="3vh">
+    <el-dialog :visible.sync="centerDialogVisible" :title="type" width="60%" top="3vh">
       <el-row :gutter="20">
-        <el-col :span="12">
-          <span style="font-size: 18px; font-weight: bold;">Edit source here:</span>
+        <el-col :span="24">
           <el-input
             :rows="20"
             :placeholder="$t('ruleConfig.form.inputPlaceholder')"
             v-model="textarea"
             type="textarea"
             class="edit-text"
-          />
-        </el-col>
-        <el-col :span="12">
-          <span style="font-size: 18px; font-weight: bold;">Result (JS object dump):</span>
-          <el-input
-            :rows="20"
-            :placeholder="$t('ruleConfig.form.inputPlaceholder')"
-            v-model="textarea2"
-            type="textarea"
-            readonly
-            class="show-text"
           />
         </el-col>
       </el-row>

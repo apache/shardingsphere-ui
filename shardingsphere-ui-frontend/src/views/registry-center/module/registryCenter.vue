@@ -125,26 +125,6 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.additionalCenterType')" prop="additionalConfigCenterType">
-          <el-radio-group v-model="form.additionalConfigCenterType">
-            <el-radio label="Zookeeper">Zookeeper</el-radio>
-            <el-radio label="Etcd">Etcd</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.additionalAddress')" prop="additionalConfigCenterServerList">
-          <el-input
-            :placeholder="$t('registryCenter.rules.additionalAddress')"
-            v-model="form.additionalConfigCenterServerList"
-            autocomplete="off"
-          />
-        </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.digest')" id="add-digest-additional" v-show="showAddDigestAdditional">
-          <el-input
-            :placeholder="$t('registryCenter.rules.digest')"
-            v-model="form.additionalDigest"
-            autocomplete="off"
-          />
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="regustDialogVisible = false">{{ $t("registryCenter.registDialog.btnCancelTxt") }}</el-button>
@@ -190,26 +170,6 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.additionalCenterType')" prop="additionalConfigCenterType">
-          <el-radio-group v-model="editForm.additionalConfigCenterType">
-            <el-radio label="Zookeeper">Zookeeper</el-radio>
-            <el-radio label="Etcd">Etcd</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.additionalAddress')" prop="additionalConfigCenterServerList">
-          <el-input
-            :placeholder="$t('registryCenter.rules.additionalAddress')"
-            v-model="editForm.additionalConfigCenterServerList"
-            autocomplete="off"
-          />
-        </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.digest')" v-show="showEditDigestAdditional">
-          <el-input
-            :placeholder="$t('registryCenter.rules.digest')"
-            v-model="editForm.additionalDigest"
-            autocomplete="off"
-          />
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancelEdit">{{ $t("registryCenter.registDialog.btnCancelTxt") }}</el-button>
@@ -251,15 +211,7 @@ export default {
         {
           label: this.$t('registryCenter').registDialog.address,
           prop: 'serverLists'
-        },
-        {
-          label: this.$t('registryCenter').registDialog.additionalCenterType,
-          prop: 'additionalConfigCenterType'
-        },
-        {
-          label: this.$t('registryCenter').registDialog.additionalAddress,
-          prop: 'additionalConfigCenterServerList'
-        },
+        }
       ],
       form: {
         name: '',

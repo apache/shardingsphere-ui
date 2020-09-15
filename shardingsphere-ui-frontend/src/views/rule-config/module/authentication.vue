@@ -18,17 +18,8 @@
 <template>
   <el-card class="box-card authentication">
     <el-row :gutter="20">
-      <el-col :span="12">
-        <span
-          style="font-size: 14px; color: #4a4a4a; margin-bottom: 10px;display: inline-block;"
-        >Edit source here:</span>
+      <el-col :span="24">
         <el-input :rows="20" v-model="textarea" type="textarea" class="edit-text"/>
-      </el-col>
-      <el-col :span="12">
-        <span
-          style="font-size: 14px; color: #4a4a4a; margin-bottom: 10px;display: inline-block;"
-        >Result (JS object dump):</span>
-        <el-input :rows="20" v-model="textarea2" type="textarea" readonly class="show-text"/>
       </el-col>
     </el-row>
     <el-row>
@@ -87,7 +78,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .authentication {
   margin-top: 20px;
   .edit-text {

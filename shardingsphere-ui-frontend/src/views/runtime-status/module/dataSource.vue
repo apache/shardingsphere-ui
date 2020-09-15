@@ -25,7 +25,7 @@
         :label="item.label"
         :width="item.width"
       />
-      <el-table-column :label="$t('registryCenter.table.operate')" fixed="right" width="80" align="center">
+      <el-table-column :label="$t('runtimeStatus.enabled')" fixed="right" width="80" align="center">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.enabled" @change="handleChange(scope.row)" />
         </template>

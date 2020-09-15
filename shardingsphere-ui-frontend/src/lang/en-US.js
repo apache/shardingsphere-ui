@@ -56,6 +56,7 @@ export default {
       updateFaildMessage: 'Update Faild',
       confirmDelOperator: 'Confirm delete'
     },
+    currentRegistryCenter: 'Connected Registry Center',
     loginOut: 'Sign Out',
     dropdownList: [
       {
@@ -100,10 +101,10 @@ export default {
       btnCancelTxt: 'Cancel'
     },
     table: {
-      operate: 'Operate',
+      operate: 'Operation',
       operateConnect: 'Connect',
       operateConnected: 'Connected',
-      operateDel: 'Del',
+      operateDel: 'Delete',
       operateEdit: 'Edit'
     },
     rules: {
@@ -127,7 +128,8 @@ export default {
     instance: {
       instanceId: 'Instance Id',
       serverIp: 'Server Ip'
-    }
+    },
+    enabled: 'Enabled'
   },
   ruleConfig: {
     form: {
