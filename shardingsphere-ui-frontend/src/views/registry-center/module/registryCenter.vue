@@ -133,7 +133,7 @@
         </el-form-item>
         <el-form-item :label="$t('registryCenter.registDialog.additionalAddress')" prop="additionalConfigCenterServerList">
           <el-input
-            :placeholder="$t('registryCenter.rules.address')"
+            :placeholder="$t('registryCenter.rules.additionalAddress')"
             v-model="form.additionalConfigCenterServerList"
             autocomplete="off"
           />
@@ -198,7 +198,7 @@
         </el-form-item>
         <el-form-item :label="$t('registryCenter.registDialog.additionalAddress')" prop="additionalConfigCenterServerList">
           <el-input
-            :placeholder="$t('registryCenter.rules.address')"
+            :placeholder="$t('registryCenter.rules.additionalAddress')"
             v-model="editForm.additionalConfigCenterServerList"
             autocomplete="off"
           />
