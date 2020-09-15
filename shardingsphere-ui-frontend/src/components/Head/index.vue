@@ -48,7 +48,7 @@
         <el-breadcrumb-item>
           <a
             style="font-weight: bold; color: #E17425;"
-          >{{ $store.state.global.regCenterActivated || '' }}</a>
+          >{{currentRegistryCenter}}: {{ $store.state.global.regCenterActivated || '' }}</a>
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -63,7 +63,8 @@ export default {
       username: '',
       breadcrumbTxt: '',
       dropdownList: this.$t('common').dropdownList,
-      dropdownTitle: localStorage.getItem('language') === 'zh-CN' ? this.$t('common').dropdownList[0].title : this.$t('common').dropdownList[1].title
+      dropdownTitle: localStorage.getItem('language') === 'zh-CN' ? this.$t('common').dropdownList[0].title : this.$t('common').dropdownList[1].title,
+      currentRegistryCenter: this.$t('common').currentRegistryCenter
     }
   },
   computed: {

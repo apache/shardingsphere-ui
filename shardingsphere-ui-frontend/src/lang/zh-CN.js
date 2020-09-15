@@ -20,7 +20,7 @@ export default {
     home: '主页',
     menuData: [
       {
-        title: '治理',
+        title: '分布式治理',
         child: [
           {
             title: '注册中心',
@@ -56,6 +56,7 @@ export default {
       updateFaildMessage: '更新失败',
       confirmDelOperator: '确认删除'
     },
+    currentRegistryCenter: '已连接注册中心',
     loginOut: '退出登录',
     dropdownList: [
       {
@@ -127,7 +128,8 @@ export default {
     instance: {
       instanceId: '节点标识',
       serverIp: '服务ip'
-    }
+    },
+    enabled: '是否启用'
   },
   ruleConfig: {
     form: {
