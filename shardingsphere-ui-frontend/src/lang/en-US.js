@@ -108,10 +108,11 @@ export default {
     },
     rules: {
       name: 'Please enter the name of the registration center',
-      address: 'Please enter the registration center Address',
-      namespaces: 'Please enter a Namespace',
-      centerType: 'Please select a Center Type',
-      governanceName: 'Please enter a Governance Name',
+      address: 'Please enter the registration center address',
+      additionalAddress: 'Please enter additional config center address',
+      namespaces: 'Please enter a namespace',
+      centerType: 'Please select a center type',
+      governanceName: 'Please enter a governance name',
       digest: 'Please enter a digest'
     }
   },

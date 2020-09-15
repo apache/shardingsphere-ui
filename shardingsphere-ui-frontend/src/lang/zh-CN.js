@@ -111,6 +111,7 @@ export default {
       centerType: '请选择注册中心类型',
       namespaces: '请输入命名空间',
       address: '请输入注册中心地址',
+      additionalAddress: '请输入扩展配置中心地址',
       governanceName: '请输入治理实例名称',
       digest: '请输入登录凭证'
     }
