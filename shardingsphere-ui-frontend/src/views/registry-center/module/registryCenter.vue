@@ -118,7 +118,7 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.digest')" id="add-digest" v-show="showAddDigest">
+        <el-form-item :label="$t('registryCenter.registDialog.digest')" id="add-digest">
           <el-input
             :placeholder="$t('registryCenter.rules.digest')"
             v-model="form.digest"
@@ -163,7 +163,7 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.digest')" v-show="showEditDigest">
+        <el-form-item :label="$t('registryCenter.registDialog.digest')">
           <el-input
             :placeholder="$t('registryCenter.rules.digest')"
             v-model="editForm.digest"
@@ -191,10 +191,6 @@ export default {
     return {
       regustDialogVisible: false,
       editDialogVisible: false,
-      showAddDigest:true,
-      showAddDigestAdditional:true,
-      showEditDigest:true,
-      showEditDigestAdditional:true,
       column: [
         {
           label: this.$t('registryCenter').registDialog.name,
@@ -218,10 +214,7 @@ export default {
         serverLists: '',
         instanceType: 'Zookeeper',
         governanceName: '',
-        digest: '',
-        additionalConfigCenterType: '',
-        additionalConfigCenterServerList: '',
-        additionalDigest: ''
+        digest: ''
       },
       editForm: {
         primaryName: '',
@@ -229,10 +222,7 @@ export default {
         serverLists: '',
         instanceType: 'Zookeeper',
         governanceName: '',
-        digest: '',
-        additionalConfigCenterType: '',
-        additionalConfigCenterServerList: '',
-        additionalDigest: ''
+        digest: ''
       },
       rules: {
         name: [
@@ -381,38 +371,6 @@ export default {
     },
     cancelEdit() {
       this.editDialogVisible = false
-    },
-    centerTypeChanged(value) {
-      if (value === 'Zookeeper') {
-        this.showAddDigest = true
-      } else {
-        this.showAddDigest = false
-        this.form.digest = '';
-      }
-    },
-    additionalCenterTypeChanged(value) {
-      if (value === 'Zookeeper') {
-        this.showAddDigestAdditional = true
-      } else {
-        this.showAddDigestAdditional = false
-        this.form.additionalDigest = '';
-      }
-    },
-    editCenterTypeChanged(value) {
-      if (value === 'Zookeeper') {
-        this.showEditDigest = true
-      } else {
-        this.showEditDigest = false
-        this.editForm.digest = '';
-      }
-    },
-    editAdditionalCenterTypeChanged(value) {
-      if (value === 'Zookeeper') {
-        this.showEditDigestAdditional = true
-      } else {
-        this.showEditDigestAdditional = false
-        this.editForm.additionalDigest = '';
-      }
     }
   }
 }

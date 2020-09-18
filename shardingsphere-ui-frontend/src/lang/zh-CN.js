@@ -91,8 +91,6 @@ export default {
       editTitle: '编辑注册中心',
       name: '注册中心名称',
       centerType: '注册中心类型',
-      additionalCenterType: '扩展配置中心类型',
-      additionalAddress: '扩展配置中心地址',
       address: '注册中心地址',
       governanceName: '治理实例名称',
       namespaces: '命名空间',
