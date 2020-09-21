@@ -492,7 +492,7 @@ export default {
   },
   computed: {
     textareaDatasourceCom() {
-      const DS_SCHEMA = yaml.Schema.create()
+      const DS_SCHEMA = yaml.Schema.create([])
       return JSON.stringify(
         yaml.load(this.textareaDatasource, { schema: DS_SCHEMA }),
         null,
