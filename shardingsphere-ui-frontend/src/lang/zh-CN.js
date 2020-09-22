@@ -193,6 +193,12 @@ export default {
       serviceUrl: '服务地址',
       serviceNamePlaceholder: '请输入服务名称',
       serviceUrlPlaceholder: '请输入服务地址'
+    },
+    detail: {
+      inventory: '存量',
+      increment: '增量',
+      taskId: '子任务Id',
+      delay: '延迟(秒)'
     }
   }
 }
