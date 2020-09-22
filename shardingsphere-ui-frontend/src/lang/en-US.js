@@ -155,10 +155,10 @@ export default {
   dataScaling: {
     btnTxt: 'ADD',
     tableList: {
-      jobId: 'jobId',
-      jobName: 'jobName',
-      status: 'status',
-      operate: 'operate',
+      jobId: 'Job Id',
+      jobName: 'Job Name',
+      status: 'Status',
+      operate: 'Operation',
       operateStop: 'stop',
       operateSee: 'see'
     },
@@ -195,6 +195,12 @@ export default {
       serviceUrl: 'Service Url',
       serviceNamePlaceholder: 'Please enter serviceName',
       serviceUrlPlaceholder: 'Please enter serviceUrl'
+    },
+    detail: {
+      inventory: 'Inventory',
+      increment: 'Increment',
+      taskId: 'Sub Task Id',
+      delay: 'Delay(seconds)'
     }
   }
 }
