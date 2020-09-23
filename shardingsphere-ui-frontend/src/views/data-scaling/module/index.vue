@@ -540,8 +540,9 @@ export default {
       let data = 0
       if (obj.estimatedRows) {
         data = obj.syncedRows / obj.estimatedRows
+        return nDecimal(data, 2) * 100
       }
-      return data
+      return 100
     },
     getOption(obj) {
       let data = 0
