@@ -645,9 +645,9 @@ export default {
           const { username, password, url, jobCount } = this.form
           const params = {
             ruleConfiguration: {
-              sourceDatasource: this.textareaDatasource,
+              sourceDataSource: this.textareaDatasource,
               sourceRule: this.textareaRule,
-              destinationDataSources: {
+              targetDataSources: {
                 username,
                 password,
                 url
