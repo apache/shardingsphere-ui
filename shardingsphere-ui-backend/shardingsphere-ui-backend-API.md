@@ -793,37 +793,74 @@ POST /api/shardingscaling/job/start
 
 | Parameter                                         | Describe                                        |
 | ------------------------------------------------- | ----------------------------------------------- |
-| ruleConfiguration.sourceDatasource                | source sharding proxy data source configuration |
+| ruleConfiguration.sourceDataSource                | source sharding proxy data source configuration |
 | ruleConfiguration.sourceRule                      | source sharding proxy table rule configuration  |
-| ruleConfiguration.destinationDataSources.name     | destination sharding proxy name                 |
-| ruleConfiguration.destinationDataSources.url      | destination sharding proxy jdbc url             |
-| ruleConfiguration.destinationDataSources.username | destination sharding proxy username             |
-| ruleConfiguration.destinationDataSources.password | destination sharding proxy password             |
+| ruleConfiguration.targetDataSources.name          | target sharding proxy name                      |
+| ruleConfiguration.targetDataSources.url           | target sharding proxy jdbc url                  |
+| ruleConfiguration.targetDataSources.username      | target sharding proxy username                  |
+| ruleConfiguration.targetDataSources.password      | target sharding proxy password                  |
 | jobConfiguration.concurrency                      | sync task proposed concurrency                  |
 
 #### Example
 
 ```
-
 curl -X POST \
- http://localhost:8088/api/shardingscaling/job/start \
- -H 'content-type: application/json' \
- -d '{
-"ruleConfiguration": {
-"sourceDatasource": "ds*0: !!YamlDataSourceConfiguration\n dataSourceClassName: com.zaxxer.hikari.HikariDataSource\n props:\n jdbcUrl: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=UTC&useSSL=false\n username: root\n password: '\''123456'\''\n connectionTimeout: 30000\n idleTimeout: 60000\n maxLifetime: 1800000\n maxPoolSize: 50\n minPoolSize: 1\n maintenanceIntervalMilliseconds: 30000\n readOnly: false\n",
-"sourceRule": "defaultDatabaseStrategy:\n inline:\n algorithmExpression: ds*\${user_id % 2}\n shardingColumn: user_id\ntables:\n t1:\n actualDataNodes: ds_0.t1\n keyGenerateStrategy:\n column: order_id\n type: SNOWFLAKE\n logicTable: t1\n tableStrategy:\n inline:\n algorithmExpression: t1\n shardingColumn: order_id\n t2:\n actualDataNodes: ds_0.t2\n keyGenerateStrategy:\n column: order_item_id\n type: SNOWFLAKE\n logicTable: t2\n tableStrategy:\n inline:\n algorithmExpression: t2\n shardingColumn: order_id\n",
-"destinationDataSources": {
-"name": "dt_0",
-"password": "123456",
-"url": "jdbc:mysql://127.0.0.1:3306/test2?serverTimezone=UTC&useSSL=false",
-"username": "root"
-}
-},
-"jobConfiguration": {
-"concurrency": 3
-}
-}'
-
+  http://localhost:8088/api/shardingscaling/job/start \
+  -H 'content-type: application/json' \
+  -d '{
+        "ruleConfiguration": {
+          "sourceDataSource":"
+            dataSources:
+              ds_0:
+                dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+                props:
+                  driverClassName: com.mysql.jdbc.Driver
+                  jdbcUrl: jdbc:mysql://127.0.0.1:3306/scaling_0?useSSL=false
+                  username: scaling
+                  password: scaling
+              ds_1:
+                dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+                props:
+                  driverClassName: com.mysql.jdbc.Driver
+                  jdbcUrl: jdbc:mysql://127.0.0.1:3306/scaling_1?useSSL=false
+                  username: scaling
+                  password: scaling
+            ",
+          "sourceRule":"
+            rules:
+            - !SHARDING
+              tables:
+                t_order:
+                  actualDataNodes: ds_$->{0..1}.t_order_$->{0..1}
+                  databaseStrategy:
+                    standard:
+                      shardingColumn: order_id
+                      shardingAlgorithmName: t_order_db_algorith
+                  logicTable: t_order
+                  tableStrategy:
+                    standard:
+                      shardingColumn: user_id
+                      shardingAlgorithmName: t_order_tbl_algorith
+              shardingAlgorithms:
+                t_order_db_algorith:
+                  type: INLINE
+                  props:
+                    algorithm-expression: ds_$->{order_id % 2}
+                t_order_tbl_algorith:
+                  type: INLINE
+                  props:
+                    algorithm-expression: t_order_$->{user_id % 2}
+            ",
+          "targetDataSources":{
+            "username":"root",
+            "password":"root",
+            "url":"jdbc:mysql://127.0.0.1:3307/sharding_db?serverTimezone=UTC&useSSL=false"
+          }
+        },
+        "jobConfiguration":{
+          "concurrency":"3"
+        }
+      }'
 ```
 
 #### Response
