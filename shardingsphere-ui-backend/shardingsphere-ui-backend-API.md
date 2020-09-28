@@ -269,7 +269,7 @@ GET /api/reg-center/activated
   "success": true,
   "errorCode": 0,
   "errorMsg": null,
-  "model": ["sharding_order", "sharding_db", "master_slave_db"]
+  "model": ["sharding_order", "sharding_db", "primary_replica_db"]
 }
 ```
 
@@ -432,71 +432,9 @@ GET /api/reg-center/activated
 {"success":true,"errorCode":0,"errorMsg":null,"model":null}
 ```
 
-## 5.Configuration center configmap configuration related interfaces
+## 5.Configuration center properties configuration related interfaces
 
-### 5.1 Get configmap configuration
-
-`GET /api/config-map`
-
-#### Request
-
-无
-
-#### Response
-
-| Parameter | Field type | Describe                  |
-| --------- | ---------- | ------------------------- |
-| success   | Boolean    | Is the request successful |
-| errorCode | Integer    | Error code                |
-| errorMsg  | String     | Wrong description         |
-| model     | Map        | config map                |
-
-```
-{
-  "success": true,
-  "errorCode": 0,
-  "errorMsg": null,
-  "model": {
-    "sharding-key1": "sharding-value1",
-    "sharding-key2": "sharding-value2",
-    "master-slave-key0": "master-slave-value0",
-    "master-slave-key1": "master-slave-value1"
-  }
-}
-```
-
-### 5.2 Modify configmap configuration
-
-`PUT /api/config-map`
-
-#### Request
-
-**ConfigMap**
-
-```
-{
-  "sharding-key1": "sharding-value1",
-  "sharding-key2": "sharding-value2",
-  "master-slave-key0": "master-slave-value0",
-  "master-slave-key1": "master-slave-value1"
-}
-```
-
-#### Response
-
-| Parameter | Field type | Describe                  |
-| --------- | ---------- | ------------------------- |
-| success   | Boolean    | Is the request successful |
-| errorCode | Integer    | Error code                |
-| errorMsg  | String     | Wrong description         |
-
-```
-{"success":true,"errorCode":0,"errorMsg":null,"model":null}
-```
-
-## 6.Configuration center properties configuration related interfaces
-
-### 6.1 Get property configuration
+### 5.1 Get property configuration
 
 `GET /api/properties`
 
@@ -517,7 +455,7 @@ GET /api/reg-center/activated
 {"success":true,"errorCode":0,"errorMsg":null,"model":"yaml string"}
 ```
 
-### 6.2 Modify property configuration
+### 5.2 Modify property configuration
 
 `PUT /api/properties`
 
@@ -543,9 +481,9 @@ GET /api/reg-center/activated
 {"success":true,"errorCode":0,"errorMsg":null,"model":null}
 ```
 
-## 7.Arrange interfaces related to governance
+## 6.Arrange interfaces related to governance
 
-### 7.1 Get running instance information
+### 6.1 Get running instance information
 
 `GET /api/governance/instance`
 
@@ -575,7 +513,7 @@ _Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java
 }
 ```
 
-### 7.2 Modify running instance status
+### 6.2 Modify running instance status
 
 `PUT /api/governance/instance`
 
@@ -602,7 +540,7 @@ _Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java
 {"success":true,"errorCode":0,"errorMsg":null,"model":null}
 ```
 
-### 7.3 Get from library information
+### 6.3 Get replica data source information
 
 `GET /api/governance/datasource`
 
@@ -612,17 +550,17 @@ _Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java
 
 #### Response
 
-_Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java.util.Collection<io.shardingsphere.shardingui.common.dto.SlaveDataSourceDTO>>`)
+_Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java.util.Collection<io.shardingsphere.shardingui.common.dto.ReplicaDataSourceDTO>>`)
 
 | Parameter            | Field type | Describe                                                          |
 | -------------------- | ---------- | ----------------------------------------------------------------- |
 | success              | Boolean    | Is the request successful                                         |
 | errorCode            | Integer    | Error code                                                        |
 | errorMsg             | String     | Wrong description                                                 |
-| schema               | String     | Schema name of the slave Library                                  |
-| masterDataSourceName | String     | The name of the master library corresponding to the slave Library |
-| slaveDataSourceName  | String     | Name from library                                                 |
-| enabled              | Boolean    | Enable status from library                                        |
+| schema               | String     | Schema name                                  |
+| primaryDataSourceName | String     | The name of primary data source |
+| replicaDataSourceName  | String     | The name of replica data source                                                 |
+| enabled              | Boolean    | Enable status of replica data source                                        |
 
 ```
 {
@@ -631,22 +569,22 @@ _Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java
   "errorMsg": null,
   "model": [
     {
-      "schema": "master_slave_db",
-      "masterDataSourceName": "master_ds",
-      "slaveDataSourceName": "slave_ds_0",
+      "schema": "primary_replica_db",
+      "primaryDataSourceName": "primary_ds",
+      "replicaDataSourceName": "replica_ds_0",
       "enabled": true
     },
     {
-      "schema": "master_slave_db",
-      "masterDataSourceName": "master_ds",
-      "slaveDataSourceName": "slave_ds_1",
+      "schema": "primary_replica_db",
+      "primaryDataSourceName": "primary_ds",
+      "replicaDataSourceName": "replica_ds_1",
       "enabled": true
     }
   ]
 }
 ```
 
-### 7.4 Modify slave status
+### 6.4 Modify replica status
 
 `PUT /api/governance/datasource`
 
@@ -654,16 +592,16 @@ _Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java
 
 | Parameter            | Field type | Essential                                                         | Describe |
 | -------------------- | ---------- | ----------------------------------------------------------------- | -------- |
-| schema               | String     | Schema name of the slave Library                                  |
-| masterDataSourceName | String     | The name of the master library corresponding to the slave Library |
-| slaveDataSourceName  | String     | Name from library                                                 |
-| enabled              | Boolean    | Enable status from library                                        |
+| schema               | String     | Schema name                                  |
+| primaryDataSourceName | String     | The name of primary data source |
+| replicaDataSourceName  | String     | The name of replica data source                                                 |
+| enabled              | Boolean    | Enable status of replica data source                                        |
 
 ```
 {
-  "schema": "master_slave_db",
-  "masterDataSourceName": "master_ds",
-  "slaveDataSourceName": "slave_ds_0",
+  "schema": "primary_replica_db",
+  "primaryDataSourceName": "primary_ds",
+  "replicaDataSourceName": "replica_ds_0",
   "enabled": true
 }
 ```
@@ -680,9 +618,9 @@ _Response Body_: (`io.shardingsphere.shardingui.web.response.ResponseResult<java
 {"success":true,"errorCode":0,"errorMsg":null,"model":null}
 ```
 
-## shardingscaling
+## 7. shardingscaling
 
-### Get sharding scaling service
+### 7.1 Get sharding scaling service
 
 GET /api/shardingscaling
 
@@ -720,7 +658,7 @@ OR
 
 ```
 
-### Add sharding scaling service
+### 7.2 Add sharding scaling service
 
 POST /api/shardingscaling
 
@@ -760,7 +698,7 @@ curl -X POST \
 
 ```
 
-### Delete sharding scaling service
+### 7.3 Delete sharding scaling service
 
 DELETE /api/shardingscaling
 
@@ -785,7 +723,7 @@ curl -X DELETE http://localhost:8088/api/shardingscaling
 
 ```
 
-### Start scaling job
+### 7.4 Start scaling job
 
 POST /api/shardingscaling/job/start
 
@@ -876,7 +814,7 @@ curl -X POST \
 
 ```
 
-### Get scaling progress
+### 7.5 Get scaling progress
 
 GET /api/shardingscaling/job/progress/{jobId}
 
@@ -944,7 +882,7 @@ curl -X GET \
 
 ```
 
-### List scaling jobs
+### 7.6 List scaling jobs
 
 GET /api/shardingscaling/job/list
 
@@ -975,7 +913,7 @@ curl -X GET \
 
 ```
 
-### Stop scaling job
+### 7.7 Stop scaling job
 
 POST /api/shardingscaling/job/stop
 

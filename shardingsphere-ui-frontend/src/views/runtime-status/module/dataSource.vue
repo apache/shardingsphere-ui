@@ -60,7 +60,7 @@ export default {
           prop: 'primaryDataSourceName'
         },
         {
-          label: this.$t('runtimeStatus').dataSource.slaveDataSourceName,
+          label: this.$t('runtimeStatus').dataSource.replicaDataSourceName,
           prop: 'replicaDataSourceName'
         }
       ],
