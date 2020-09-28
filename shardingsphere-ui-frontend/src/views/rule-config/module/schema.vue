@@ -207,7 +207,7 @@ export default {
         }
       )
       const masterSlaveYamlType = new yaml.Type(
-        '!MASTER_SLAVE',
+        '!PRIMARY_REPLICA_REPLICATION',
         {
           kind: 'mapping',
           construct(data) {
