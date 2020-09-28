@@ -20,10 +20,10 @@ package org.apache.shardingsphere.ui.servcie.impl;
 import com.google.common.base.Joiner;
 import org.apache.shardingsphere.governance.core.registry.RegistryCenterNodeStatus;
 import org.apache.shardingsphere.infra.config.RuleConfiguration;
-import org.apache.shardingsphere.masterslave.api.config.MasterSlaveRuleConfiguration;
-import org.apache.shardingsphere.masterslave.api.config.rule.MasterSlaveDataSourceRuleConfiguration;
+import org.apache.shardingsphere.replication.primaryreplica.api.config.PrimaryReplicaReplicationRuleConfiguration;
+import org.apache.shardingsphere.replication.primaryreplica.api.config.rule.PrimaryReplicaReplicationDataSourceRuleConfiguration;
 import org.apache.shardingsphere.ui.common.dto.InstanceDTO;
-import org.apache.shardingsphere.ui.common.dto.SlaveDataSourceDTO;
+import org.apache.shardingsphere.ui.common.dto.ReplicaDataSourceDTO;
 import org.apache.shardingsphere.ui.servcie.GovernanceService;
 import org.apache.shardingsphere.ui.servcie.RegistryCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingSchemaService;
@@ -67,13 +67,13 @@ public final class GovernanceServiceImpl implements GovernanceService {
     }
     
     @Override
-    public Collection<SlaveDataSourceDTO> getAllSlaveDataSource() {
-        Collection<SlaveDataSourceDTO> result = new ArrayList<>();
+    public Collection<ReplicaDataSourceDTO> getAllReplicaDataSource() {
+        Collection<ReplicaDataSourceDTO> result = new ArrayList<>();
         for (String schemaName : shardingSchemaService.getAllSchemaNames()) {
             String configData = shardingSchemaService.getRuleConfiguration(schemaName);
             if (configData.contains("!SHARDING")) {
                 handleShardingRuleConfiguration(result, configData, schemaName);
-            } else if (configData.contains("!MASTER_SLAVE")) {
+            } else if (configData.contains("!PRIMARY_REPLICA_REPLICATION")) {
                 handleMasterSlaveRuleConfiguration(result, configData, schemaName);
             }
         }
@@ -81,9 +81,9 @@ public final class GovernanceServiceImpl implements GovernanceService {
     }
     
     @Override
-    public void updateSlaveDataSourceStatus(final String schemaNames, final String slaveDataSourceName, final boolean enabled) {
+    public void updateReplicaDataSourceStatus(final String schemaNames, final String replicaDataSourceName, final boolean enabled) {
         String value = enabled ? "" : RegistryCenterNodeStatus.DISABLED.toString();
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getDataSourcePath(schemaNames, slaveDataSourceName), value);
+        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getDataSourcePath(schemaNames, replicaDataSourceName), value);
     }
     
     private String getInstancesNodeFullRootPath() {
@@ -91,31 +91,31 @@ public final class GovernanceServiceImpl implements GovernanceService {
         return result.substring(0, result.length() - 1);
     }
     
-    private void handleShardingRuleConfiguration(final Collection<SlaveDataSourceDTO> slaveDataSourceDTOS, final String configData, final String schemaName) {
+    private void handleShardingRuleConfiguration(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final String configData, final String schemaName) {
         Collection<RuleConfiguration> configurations = ConfigurationYamlConverter.loadRuleConfigurations(configData);
-        Collection<MasterSlaveRuleConfiguration> masterSlaveRuleConfigs = configurations.stream().filter(
-            config -> config instanceof MasterSlaveRuleConfiguration).map(config -> (MasterSlaveRuleConfiguration) config).collect(Collectors.toList());
-        for (MasterSlaveRuleConfiguration masterSlaveRuleConfiguration : masterSlaveRuleConfigs) {
-            addSlaveDataSource(slaveDataSourceDTOS, masterSlaveRuleConfiguration, schemaName);
+        Collection<PrimaryReplicaReplicationRuleConfiguration> primaryReplicaReplicationRuleConfigs = configurations.stream().filter(
+            config -> config instanceof PrimaryReplicaReplicationRuleConfiguration).map(config -> (PrimaryReplicaReplicationRuleConfiguration) config).collect(Collectors.toList());
+        for (PrimaryReplicaReplicationRuleConfiguration primaryReplicaReplicationRuleConfiguration : primaryReplicaReplicationRuleConfigs) {
+            addSlaveDataSource(replicaDataSourceDTOS, primaryReplicaReplicationRuleConfiguration, schemaName);
         }
     }
     
-    private void handleMasterSlaveRuleConfiguration(final Collection<SlaveDataSourceDTO> slaveDataSourceDTOS, final String configData, final String schemaName) {
-        MasterSlaveRuleConfiguration masterSlaveRuleConfiguration = ConfigurationYamlConverter.loadMasterSlaveRuleConfiguration(configData);
-        addSlaveDataSource(slaveDataSourceDTOS, masterSlaveRuleConfiguration, schemaName);
+    private void handleMasterSlaveRuleConfiguration(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final String configData, final String schemaName) {
+        PrimaryReplicaReplicationRuleConfiguration primaryReplicaReplicationRuleConfiguration = ConfigurationYamlConverter.loadPrimaryReplicaRuleConfiguration(configData);
+        addSlaveDataSource(replicaDataSourceDTOS, primaryReplicaReplicationRuleConfiguration, schemaName);
     }
     
-    private void addSlaveDataSource(final Collection<SlaveDataSourceDTO> slaveDataSourceDTOS, final MasterSlaveRuleConfiguration masterSlaveRuleConfiguration, final String schemaName) {
+    private void addSlaveDataSource(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final PrimaryReplicaReplicationRuleConfiguration primaryReplicaReplicationRuleConfiguration, final String schemaName) {
         Collection<String> disabledSchemaDataSourceNames = getDisabledSchemaDataSourceNames();
-        for (MasterSlaveDataSourceRuleConfiguration each : masterSlaveRuleConfiguration.getDataSources()) {
-            slaveDataSourceDTOS.addAll(getSlaveDataSourceDTOS(schemaName, disabledSchemaDataSourceNames, each));
+        for (PrimaryReplicaReplicationDataSourceRuleConfiguration each : primaryReplicaReplicationRuleConfiguration.getDataSources()) {
+            replicaDataSourceDTOS.addAll(getReplicaDataSourceDTOS(schemaName, disabledSchemaDataSourceNames, each));
         }
     }
     
-    private Collection<SlaveDataSourceDTO> getSlaveDataSourceDTOS(final String schemaName, final Collection<String> disabledSchemaDataSourceNames, final MasterSlaveDataSourceRuleConfiguration group) {
-        Collection<SlaveDataSourceDTO> result = new LinkedList<>();
-        for (String each : group.getSlaveDataSourceNames()) {
-            result.add(new SlaveDataSourceDTO(schemaName, group.getMasterDataSourceName(), each, !disabledSchemaDataSourceNames.contains(schemaName + "." + each)));
+    private Collection<ReplicaDataSourceDTO> getReplicaDataSourceDTOS(final String schemaName, final Collection<String> disabledSchemaDataSourceNames, final PrimaryReplicaReplicationDataSourceRuleConfiguration group) {
+        Collection<ReplicaDataSourceDTO> result = new LinkedList<>();
+        for (String each : group.getReplicaDataSourceNames()) {
+            result.add(new ReplicaDataSourceDTO(schemaName, group.getPrimaryDataSourceName(), each, !disabledSchemaDataSourceNames.contains(schemaName + "." + each)));
         }
         return result;
     }

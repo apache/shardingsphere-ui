@@ -18,7 +18,7 @@
 package org.apache.shardingsphere.ui.web.controller;
 
 import org.apache.shardingsphere.ui.common.dto.InstanceDTO;
-import org.apache.shardingsphere.ui.common.dto.SlaveDataSourceDTO;
+import org.apache.shardingsphere.ui.common.dto.ReplicaDataSourceDTO;
 import org.apache.shardingsphere.ui.servcie.GovernanceService;
 import org.apache.shardingsphere.ui.web.response.ResponseResult;
 import org.apache.shardingsphere.ui.web.response.ResponseResultUtil;
@@ -63,24 +63,24 @@ public final class GovernanceController {
     }
     
     /**
-     * Load all slave data sources.
+     * Load all replica data sources.
      *
      * @return response result
      */
     @RequestMapping(value = "/datasource", method = RequestMethod.GET)
-    public ResponseResult<Collection<SlaveDataSourceDTO>> loadAllSlaveDataSources() {
-        return ResponseResultUtil.build(governanceService.getAllSlaveDataSource());
+    public ResponseResult<Collection<ReplicaDataSourceDTO>> loadAllReplicaDataSources() {
+        return ResponseResultUtil.build(governanceService.getAllReplicaDataSource());
     }
     
     /**
-     * Update slave data source status.
+     * Update replica data source status.
      *
-     * @param slaveDataSourceDTO slave data source DTO
+     * @param replicaDataSourceDTO replica data source DTO
      * @return response result
      */
     @RequestMapping(value = "/datasource", method = RequestMethod.PUT)
-    public ResponseResult updateSlaveDataSourceStatus(@RequestBody final SlaveDataSourceDTO slaveDataSourceDTO) {
-        governanceService.updateSlaveDataSourceStatus(slaveDataSourceDTO.getSchema(), slaveDataSourceDTO.getSlaveDataSourceName(), slaveDataSourceDTO.isEnabled());
+    public ResponseResult updateReplicaDataSourceStatus(@RequestBody final ReplicaDataSourceDTO replicaDataSourceDTO) {
+        governanceService.updateReplicaDataSourceStatus(replicaDataSourceDTO.getSchema(), replicaDataSourceDTO.getReplicaDataSourceName(), replicaDataSourceDTO.isEnabled());
         return ResponseResultUtil.success();
     }
     
