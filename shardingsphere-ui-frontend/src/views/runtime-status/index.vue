@@ -19,7 +19,7 @@
   <el-row class="box-card">
     <el-radio-group v-model="radioValue" @change="onChange">
       <el-radio-button label="1">{{ $t('runtimeStatus.serviceNode') }}</el-radio-button>
-      <el-radio-button label="2">{{ $t('runtimeStatus.slaveDataSourceName') }}</el-radio-button>
+      <el-radio-button label="2">{{ $t('runtimeStatus.replicaDataSourceName') }}</el-radio-button>
     </el-radio-group>
     <component :is="currentView" />
   </el-row>
