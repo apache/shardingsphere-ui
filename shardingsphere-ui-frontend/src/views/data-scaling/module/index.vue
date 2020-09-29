@@ -645,12 +645,20 @@ export default {
           const { username, password, url, jobCount } = this.form
           const params = {
             ruleConfiguration: {
-              sourceDataSource: this.textareaDatasource,
-              sourceRule: this.textareaRule,
-              targetDataSources: {
-                username,
-                password,
-                url
+              source: {
+                type: 'shardingSphereJdbc',
+                parameter: {
+                  dataSource: this.textareaDatasource,
+                  rule: this.textareaRule,
+                }
+              },
+              target: {
+                type: 'jdbc',
+                parameter: {
+                  username: username,
+                  password: password,
+                  jdbcUrl: url
+                }
               }
             },
             jobConfiguration: {
