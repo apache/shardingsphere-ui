@@ -63,6 +63,7 @@
         <profile>
             <id>release</id>
             <build>
+                <finalName>apache-shardingsphere-${project.version}</finalName>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
