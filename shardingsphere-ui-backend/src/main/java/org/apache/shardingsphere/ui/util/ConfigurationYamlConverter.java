@@ -31,7 +31,7 @@ import org.apache.shardingsphere.infra.config.datasource.DataSourceConfiguration
 import org.apache.shardingsphere.infra.yaml.config.YamlRootRuleConfigurations;
 import org.apache.shardingsphere.infra.yaml.engine.YamlEngine;
 import org.apache.shardingsphere.infra.yaml.swapper.YamlRuleConfigurationSwapperEngine;
-import org.apache.shardingsphere.replication.primaryreplica.api.config.PrimaryReplicaReplicationRuleConfiguration;
+import org.apache.shardingsphere.replicaquery.api.config.ReplicaQueryRuleConfiguration;
 
 import java.util.Collection;
 import java.util.Map;
@@ -68,15 +68,15 @@ public final class ConfigurationYamlConverter {
     }
     
     /**
-     * Load primary replica rule configuration.
+     * Load replica query rule configuration.
      *
      * @param data data
-     * @return primary replica rule configuration
+     * @return replica query rule configuration
      */
-    public static PrimaryReplicaReplicationRuleConfiguration loadPrimaryReplicaRuleConfiguration(final String data) {
+    public static ReplicaQueryRuleConfiguration loadPrimaryReplicaRuleConfiguration(final String data) {
         Collection<RuleConfiguration> ruleConfigurations = loadRuleConfigurations(data);
-        Optional<PrimaryReplicaReplicationRuleConfiguration> result = ruleConfigurations.stream().filter(
-            each -> each instanceof PrimaryReplicaReplicationRuleConfiguration).map(ruleConfiguration -> (PrimaryReplicaReplicationRuleConfiguration) ruleConfiguration).findFirst();
+        Optional<ReplicaQueryRuleConfiguration> result = ruleConfigurations.stream().filter(
+            each -> each instanceof ReplicaQueryRuleConfiguration).map(ruleConfiguration -> (ReplicaQueryRuleConfiguration) ruleConfiguration).findFirst();
         Preconditions.checkState(result.isPresent());
         return result.get();
     }
