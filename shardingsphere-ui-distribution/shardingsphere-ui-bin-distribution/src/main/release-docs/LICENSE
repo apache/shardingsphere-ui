@@ -213,37 +213,68 @@ Apache 2.0 licenses
 ========================================================================
 
 The following components are provided under the Apache License. See project link for details.
-The text of each license is also included at licenses/LICENSE-[project].txt.
+The text of each license is the standard Apache 2.0 license.
 
-    groovy 2.4.5-indy: https://github.com/apache/groovy, Apache 2.0
-    echarts 4.6.0: https://github.com/apache/incubator-echarts, Apache 2.0
+    audience-annotations 0.5.0: https://github.com/apache/yetus, Apache 2.0
+    commons-codec 1.10: https://github.com/apache/commons-codec, Apache 2.0
+    commons-collections4 4.2: https://github.com/apache/commons-collections, Apache 2.0
+    commons-lang 2.6: https://github.com/apache/commons-lang, Apache 2.0
+    curator-client 5.1.0:  https://github.com/apache/curator, Apache 2.0
+    curator-framework 5.1.0:  https://github.com/apache/curator, Apache 2.0
+    curator-recipes 5.1.0:  https://github.com/apache/curator, Apache 2.0
+    error_prone_annotations 2.3.4: https://github.com/google/error-prone, Apache 2.0
+    Failsafe 2.3.3: https://github.com/jhalterman/failsafe, Apache 2.0
+    grpc-api 1.27.1: https://github.com/grpc/grpc, Apache 2.0
+    grpc-context 1.27.1: https://github.com/grpc/grpc, Apache 2.0
+    grpc-core 1.27.1: https://github.com/grpc/grpc, Apache 2.0
+    grpc-grpclb 1.27.1: https://github.com/grpc/grpc, Apache 2.0
+    grpc-netty 1.27.1: https://github.com/grpc/grpc, Apache 2.0
+    grpc-protobuf 1.27.1: https://github.com/grpc/grpc, Apache 2.0
+    grpc-protobuf-lite 1.27.1: https://github.com/grpc/grpc, Apache 2.0
+    grpc-stub 1.27.1: https://github.com/grpc/grpc, Apache 2.0
+    gson-2.8.6: https://github.com/google/gson, Apache 2.0
+    guava 29.0-jre: https://github.com/google/guava, Apache 2.0
+    httpclient 4.5.8: https://github.com/apache/httpcomponents-client, Apache 2.0
+    httpcore 4.4.11: https://github.com/apache/httpcomponents-core, Apache 2.0
+    jackson-databind 2.8.11.3: https://github.com/FasterXML/jackson-databind, Apache 2.0
+    jackson-annotations 2.8.0: https://github.com/FasterXML/jackson-annotations, Apache 2.0
+    jackson-core 2.8.10: https://github.com/FasterXML/jackson-core, Apache 2.0
+    jetcd-common 0.5.0: https://github.com/etcd-io/jetcd, Apache 2.0
+    jetcd-core 0.5.0: https://github.com/etcd-io/jetcd, Apache 2.0
+    jetcd-resolver 0.5.0: https://github.com/etcd-io/jetcd, Apache 2.0
+    listenablefuture 9999.0-empty-to-avoid-conflict-with-guava:https://github.com/google/guava, Apache 2.0
+    log4j 1.2.16: http://logging.apache.org/log4j/1.2/, Apache 2.0
+    netty-all 4.1.45: https://github.com/netty, Apache 2.0
+    netty-buffer 4.1.45.Final: https://github.com/netty, Apache 2.0
+    netty-codec 4.1.45.Final: https://github.com/netty, Apache 2.0
+    netty-codec-http 4.1.42.Final: https://github.com/netty, Apache 2.0
+    netty-codec-http2 4.1.42.Final: https://github.com/netty, Apache 2.0
+    netty-codec-socks 4.1.42.Final: https://github.com/netty, Apache 2.0
+    netty-common 4.1.45.Final: https://github.com/netty, Apache 2.0
+    netty-handler 4.1.45.Final: https://github.com/netty, Apache 2.0
+    netty-handler-proxy 4.1.42.Final: https://github.com/netty, Apache 2.0
+    netty-resolver 4.1.45.Final: https://github.com/netty, Apache 2.0
+    netty-transport 4.1.45.Final: https://github.com/netty, Apache 2.0
+    netty-transport-native-epoll 4.1.45.Final: https://github.com/netty, Apache 2.0
+    netty-transport-native-unix-common 4.1.45.Final: https://github.com/netty, Apache 2.0
+    proto-google-common-protos 1.17.0: https://github.com/googleapis/common-protos-java, Apache 2.0
+    SnakeYAML 1.16: http://www.snakeyaml.org, Apache 2.0
+    spring-boot 1.5.21.RELEASE: https://raw.githubusercontent.com/spring-projects/spring-boot, Apache 2.0
+    spring-framework 4.3.24.RELEASE: https://raw.githubusercontent.com/spring-projects/spring-framework, Apache 2.0
+    tomcat 8.5.40: http://svn.apache.org/repos/asf/tomcat, Apache 2.0
+    zookeeper 3.6.0: https://github.com/apache/zookeeper, Apache 2.0
+    zookeeper-jute 3.6.0: https://github.com/apache/zookeeper, Apache 2.0    
 
 ========================================================================
 Apache 2.0 licenses
 ========================================================================
 
 The following components are provided under the Apache License. See project link for details.
-The text of each license is the standard Apache 2.0 license.
+The text of each license is also included at licenses/LICENSE-[project].txt.
 
-    commons-codec 1.10: https://github.com/apache/commons-codec, Apache 2.0
-    commons-logging 1.2 https://raw.githubusercontent.com/apache/commons-logging, Apache 2.0
-    curator-client 2.10.0:  https://github.com/apache/curator,  Apache 2.0
-    curator-framework 2.10.0:  https://github.com/apache/curator,  Apache 2.0
-    curator-recipes 2.10.0:  https://github.com/apache/curator,  Apache 2.0
-    guava 18.0: https://github.com/google/guava, Apache 2.0
-    httpclient 4.5.8: https://github.com/apache/httpcomponents-client, Apache 2.0
-    httpcore 4.4.11: https://github.com/apache/httpcomponents-core, Apache 2.0
-    log4j 1.2.16: http://logging.apache.org/log4j/1.2/, Apache 2.0
-    SnakeYAML 1.16: http://www.snakeyaml.org , Apache 2.0
-    zookeeper 3.4.6: https://github.com/apache/zookeeper, Apache 2.0
-    jackson-databind 2.8.11.3: https://github.com/FasterXML/jackson-databind, Apache 2.0
-    jackson-annotations 2.8.0: https://github.com/FasterXML/jackson-annotations, Apache 2.0
-    jackson-core 2.8.10: https://github.com/FasterXML/jackson-core, Apache 2.0
-    spring-boot 1.5.21.RELEASE: https://raw.githubusercontent.com/spring-projects/spring-boot, Apache 2.0
-    spring-framework 4.3.24.RELEASE: https://raw.githubusercontent.com/spring-projects/spring-framework, Apache 2.0
-    tomcat 8.5.40: http://svn.apache.org/repos/asf/tomcat, Apache 2.0
-    gson 2.8.5: https://github.com/google/gson, Apache 2.0
-
+    groovy 2.4.5-indy: https://github.com/apache/groovy, Apache 2.0
+    echarts 4.6.0: https://github.com/apache/incubator-echarts, Apache 2.0
+    
 ========================================================================
 BSD licenses
 ========================================================================
@@ -251,7 +282,9 @@ BSD licenses
 The following components are provided under a BSD license. See project link for details.
 The text of each license is also included at licenses/LICENSE-[project].txt.
 
-    jline 0.9.94: https://github.com/jline/jline1, BSD-3-Clause
+    antlr4-runtime 4.7.2: https://github.com/antlr/antlr4, BSD-3-Clause
+    protobuf-java 3.11.0: https://github.com/protocolbuffers/protobuf/blob/master/java, BSD-3-Clause
+    protobuf-java-util 3.11.0: https://github.com/protocolbuffers/protobuf/blob/master/java, BSD-3-Clause 
 
 ========================================================================
 EPL licenses
@@ -271,8 +304,8 @@ The following components are provided under the MIT License. See project link fo
 The text of each license is also included at licenses/LICENSE-[project].txt.
 
    jcl-over-slf4j 1.7.7: https://www.slf4j.org, MIT
-   slf4j 1.7.7: https://www.slf4j.org, MIT
    jul-to-slf4j 1.7.26: https://www.slf4j.org, MIT
+   slf4j 1.7.7: https://www.slf4j.org, MIT
 
    axios 0.18.0: https://github.com/axios/axios, MIT
    element-ui 2.4.9: https://github.com/ElemeFE/element, MIT
