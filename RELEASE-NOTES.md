@@ -1,4 +1,13 @@
 
+## 5.0.0-alpha
+
+### Enhancement
+
+1. Combine the display of config center and registry center
+1. Support etcd registry center
+1. Support the display of metadata for each scheme
+1. Support removing schema dynamically
+
 ## 4.1.1
 
 ### Enhancement
