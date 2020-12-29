@@ -17,10 +17,6 @@
 
 package org.apache.shardingsphere.ui.servcie.forward.impl;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import java.util.Optional;
 import org.apache.shardingsphere.ui.common.constant.ForwardServiceType;
 import org.apache.shardingsphere.ui.common.domain.ForwardServiceConfig;
 import org.apache.shardingsphere.ui.common.exception.ShardingSphereUIException;
@@ -29,6 +25,10 @@ import org.apache.shardingsphere.ui.servcie.forward.ShardingScalingForwardServic
 import org.apache.shardingsphere.ui.util.HttpClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Optional;
 
 /**
  * Implementation of forward server for sharding scaling.
@@ -42,7 +42,7 @@ public final class ShardingScalingForwardServiceImpl implements ShardingScalingF
     
     private static final String PROGRESS_JOB_FORWARD_URL = "http://%s/scaling/job/progress/%d";
     
-    private static final String STOP_JOB_FORWARD_URL = "http://%s/scaling/job/stop";
+    private static final String STOP_JOB_FORWARD_URL = "http://%s/scaling/job/stop/%d";
     
     @Autowired
     private ForwardServiceConfigsRepository forwardServiceConfigsRepository;
@@ -68,7 +68,7 @@ public final class ShardingScalingForwardServiceImpl implements ShardingScalingF
     }
     
     @Override
-    public String getShardingScalingJobProgress(final int jobId) {
+    public String getShardingScalingJobProgress(final long jobId) {
         try {
             return HttpClientUtil.doGet(String.format(PROGRESS_JOB_FORWARD_URL, getShardingScalingUrl(), jobId));
         } catch (IOException e) {
@@ -79,11 +79,13 @@ public final class ShardingScalingForwardServiceImpl implements ShardingScalingF
     }
     
     @Override
-    public String stopShardingScalingJob(final String requestBody) {
+    public String stopShardingScalingJob(final long jobId) {
         try {
-            return HttpClientUtil.doPostWithJsonRequestBody(String.format(STOP_JOB_FORWARD_URL, getShardingScalingUrl()), requestBody);
+            return HttpClientUtil.doGet(String.format(STOP_JOB_FORWARD_URL, getShardingScalingUrl(), jobId));
         } catch (IOException e) {
             throw forwardShardingScalingException();
+        } catch (URISyntaxException e) {
+            throw invalidShardingScalingException();
         }
     }
     

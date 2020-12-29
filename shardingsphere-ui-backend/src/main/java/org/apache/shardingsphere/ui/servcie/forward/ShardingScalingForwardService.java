@@ -40,16 +40,16 @@ public interface ShardingScalingForwardService {
     /**
      * Get sharding scaling job progress.
      *
-     * @param jobId job id.
+     * @param jobId job id
      * @return response string from sharding scaling server
      */
-    String getShardingScalingJobProgress(int jobId);
+    String getShardingScalingJobProgress(long jobId);
     
     /**
      * Stop sharding scaling job.
      *
-     * @param requestBody request body of stop sharding scaling job
+     * @param jobId job id
      * @return response string from sharding scaling server
      */
-    String stopShardingScalingJob(String requestBody);
+    String stopShardingScalingJob(long jobId);
 }

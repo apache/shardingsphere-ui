@@ -944,7 +944,7 @@ curl -X GET \
 
 ### 7.7 Stop scaling job
 
-POST /api/shardingscaling/job/stop
+GET /api/shardingscaling/job/stop
 
 #### Body
 
@@ -955,14 +955,8 @@ POST /api/shardingscaling/job/stop
 #### Example
 
 ```
-
-curl -X POST \
- http://localhost:8088/api/shardingscaling/job/stop \
- -H 'content-type: application/json' \
- -d '{
-"jobId":1
-}'
-
+curl -X GET \
+  http://localhost:8888/scaling/job/stop/1
 ```
 
 #### Response

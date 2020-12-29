@@ -33,7 +33,7 @@ export default {
           {
             title: 'Runtime Status',
             href: '/runtime-status'
-          },
+          }
         ]
       },
       {
@@ -200,7 +200,10 @@ export default {
       inventory: 'Inventory',
       increment: 'Increment',
       taskId: 'Sub Task Id',
-      delay: 'Delay(seconds)'
+      shardingItem: 'Sharding Item',
+      delay: 'Delay(seconds)',
+      total: 'Total Tasks',
+      finished: 'Finished Tasks'
     }
   }
 }

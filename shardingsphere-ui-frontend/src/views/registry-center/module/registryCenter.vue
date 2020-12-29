@@ -118,7 +118,7 @@
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.digest')" id="add-digest">
+        <el-form-item id="add-digest" :label="$t('registryCenter.registDialog.digest')">
           <el-input
             :placeholder="$t('registryCenter.rules.digest')"
             v-model="form.digest"

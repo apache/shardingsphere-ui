@@ -29,8 +29,8 @@ export default {
     API.get(`/api/shardingscaling/job/list`, params),
   getJobProgress: jobId =>
     API.get(`/api/shardingscaling/job/progress/${jobId}`),
-  postJobStop: (params = {}) =>
-    API.post(`/api/shardingscaling/job/stop`, params),
+  getJobStop: jobId =>
+    API.get(`/api/shardingscaling/job/stop/${jobId}`),
   getSchema,
   getSchemaDataSource,
   getSchemaRule,

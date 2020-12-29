@@ -48,7 +48,7 @@
         <el-breadcrumb-item>
           <a
             style="font-weight: bold; color: #E17425;"
-          >{{currentRegistryCenter}}: {{ $store.state.global.regCenterActivated || '' }}</a>
+          >{{ currentRegistryCenter }}: {{ $store.state.global.regCenterActivated || '' }}</a>
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>

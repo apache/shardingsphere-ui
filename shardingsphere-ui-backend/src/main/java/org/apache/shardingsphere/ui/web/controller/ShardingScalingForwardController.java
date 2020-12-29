@@ -112,18 +112,18 @@ public final class ShardingScalingForwardController {
      * @return response result
      */
     @RequestMapping(value = "/job/progress/{jobId}", method = RequestMethod.GET)
-    public ResponseResult getShardingScalingJobProgress(@PathVariable("jobId") final int jobId) {
+    public ResponseResult getShardingScalingJobProgress(@PathVariable("jobId") final long jobId) {
         return ResponseResultUtil.buildFromJson(shardingScalingForwardService.getShardingScalingJobProgress(jobId));
     }
     
     /**
      * Stop sharding scaling job progress.
      *
-     * @param requestBody request body of stop sharding scaling job
+     * @param jobId job id
      * @return response result
      */
-    @RequestMapping(value = "/job/stop", method = RequestMethod.POST)
-    public ResponseResult stopShardingScalingJob(@RequestBody final String requestBody) {
-        return ResponseResultUtil.buildFromJson(shardingScalingForwardService.stopShardingScalingJob(requestBody));
+    @RequestMapping(value = "/job/stop/{jobId}", method = RequestMethod.GET)
+    public ResponseResult stopShardingScalingJob(@PathVariable("jobId") final long jobId) {
+        return ResponseResultUtil.buildFromJson(shardingScalingForwardService.stopShardingScalingJob(jobId));
     }
 }
