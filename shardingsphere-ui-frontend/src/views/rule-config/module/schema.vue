@@ -80,7 +80,8 @@
     <el-dialog
       :visible.sync="addSchemaDialogVisible"
       :title="$t('ruleConfig.schema.title')"
-      width="80%" top="3vh">
+      width="80%"
+      top="3vh">
       <el-form ref="form" :model="form" :rules="rules" label-width="170px">
         <el-form-item :label="$t('ruleConfig.schema.name')" prop="name">
           <el-input
@@ -249,7 +250,6 @@ export default {
           this.renderYaml(parent, child, res)
         })
       } else {
-        //child is metadata
         API.getSchemaMetadata(parent).then(res => {
           this.renderMetadataYaml(parent, child, res)
         })

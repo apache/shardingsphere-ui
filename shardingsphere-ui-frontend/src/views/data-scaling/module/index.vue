@@ -207,25 +207,18 @@
 
       <el-tabs v-model="activeName">
         <el-tab-pane name="first">
-          <div slot="label">{{this.$t('dataScaling').detail.inventory}} ({{percentageComputed}}%)</div>
-          <el-row :gutter="10">
-            <div v-for="(item, index) in jobDetail.inventoryDataTasks">
-              <div v-for="(item1, idx) in item.innerTaskProgresses">
-                <el-col
-                  :span="4"
-                  :key="index"
-                >
-                  <div style="margin-bottom: 10px;">{{item1.id}}</div>
-                  <el-progress type="circle" :percentage="getPercentage(item1)"></el-progress>
-                </el-col>
-              </div>
-            </div>
-          </el-row>
+          <div slot="label">{{ this.$t('dataScaling').detail.inventory }} ({{ percentageComputed }}%)</div>
+          <el-table :data="jobDetail.inventoryTaskProgress">
+            <el-table-column :label="this.$t('dataScaling').detail.shardingItem" prop="shardingItem"></el-table-column>
+            <el-table-column :label="this.$t('dataScaling').detail.total" prop="total"></el-table-column>
+            <el-table-column :label="this.$t('dataScaling').detail.finished" prop="finished"></el-table-column>
+          </el-table>
         </el-tab-pane>
         <el-tab-pane :label="this.$t('dataScaling').detail.increment" name="second">
-          <el-table :data="jobDetail.incrementalDataTasks">
+          <el-table :data="jobDetail.incrementalTaskProgress">
+            <el-table-column :label="this.$t('dataScaling').detail.shardingItem" prop="shardingItem"></el-table-column>
             <el-table-column :label="this.$t('dataScaling').detail.taskId" prop="id"></el-table-column>
-            <el-table-column :label="this.$t('dataScaling').detail.delay" prop="delayMillisecond" :formatter="dateFormat"></el-table-column>
+            <el-table-column :label="this.$t('dataScaling').detail.delay" prop="delayMillisecond"></el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -241,11 +234,11 @@
       center>
       <el-form label-width="110px">
         <el-form-item
-        :label="$t('dataScaling.serviceDialog.serviceName')">
+          :label="$t('dataScaling.serviceDialog.serviceName')">
           <el-input v-model="serviceForm.serviceName" :placeholder="$t('dataScaling.serviceDialog.serviceNamePlaceholder')"/>
         </el-form-item>
         <el-form-item
-        :label="$t('dataScaling.serviceDialog.serviceUrl')">
+          :label="$t('dataScaling.serviceDialog.serviceUrl')">
           <el-input v-model="serviceForm.serviceUrl" :placeholder="$t('dataScaling.serviceDialog.serviceUrlPlaceholder')"/>
         </el-form-item>
         <el-form-item>
@@ -445,24 +438,16 @@ export default {
       )
     },
     percentageComputed() {
-      const arr = this.jobDetail.inventoryDataTasks
-      if (!arr) return
-      let sumEstimatedRows = 0
-      let sumSyncedRows = 0
-      for (const v of arr) {
-        if (!v.innerTaskProgresses) {
-          break
-        }
-        for(const v1 of v.innerTaskProgresses) {
-          sumEstimatedRows += v1.estimatedRows
-          sumSyncedRows += v1.syncedRows
-        }
+      if (!this.jobDetail.inventoryTaskProgress) {
+        return
       }
-      let res = 0
-      if (sumEstimatedRows) {
-        res = sumSyncedRows / sumEstimatedRows
+      let total = 0
+      let finished = 0
+      for (const v of this.jobDetail.inventoryTaskProgress) {
+        total += v.total
+        finished += v.finished
       }
-      return nDecimal(res * 100, 0)
+      return total ? nDecimal(finished / total * 100, 0) : 100
     }
   },
   created() {
@@ -521,28 +506,6 @@ export default {
       }, () => {
         this.serverDialogVisible = true
       })
-    },
-    getPercentage(arr) {
-      if (!arr) return
-      let sumEstimatedRows = ''
-      let sumSyncedRows = ''
-      for (const v of arr) {
-        sumEstimatedRows += v.estimatedRows
-        sumSyncedRows += v.syncedRows
-      }
-      let res = 0
-      if (sumEstimatedRows) {
-        res = sumSyncedRows / sumEstimatedRows
-      }
-      return nDecimal(res, 2) * 100
-    },
-    getPercentage(obj) {
-      let data = 0
-      if (obj.estimatedRows) {
-        data = obj.syncedRows / obj.estimatedRows
-        return nDecimal(data, 2) * 100
-      }
-      return 100
     },
     getOption(obj) {
       let data = 0
@@ -608,10 +571,7 @@ export default {
       })
     },
     handlerStop(row) {
-      const params = {
-        jobId: row.jobId
-      }
-      API.postJobStop(params).then(res => {
+      API.getJobStop(row.jobId).then(res => {
         this.$notify({
           title: this.$t('dataScaling').notify.title,
           message: this.$t('dataScaling').notify.delSucMessage,
@@ -649,7 +609,7 @@ export default {
                 type: 'shardingSphereJdbc',
                 parameter: {
                   dataSource: this.textareaDatasource,
-                  rule: this.textareaRule,
+                  rule: this.textareaRule
                 }
               },
               target: {

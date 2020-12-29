@@ -33,7 +33,7 @@ export default {
           {
             title: '运行状态',
             href: '/runtime-status'
-          },
+          }
         ]
       },
       {
@@ -198,7 +198,10 @@ export default {
       inventory: '存量',
       increment: '增量',
       taskId: '子任务Id',
-      delay: '延迟(秒)'
+      shardingItem: '分片项',
+      delay: '延迟(秒)',
+      total: '总任务数',
+      finished: '已完成任务数'
     }
   }
 }

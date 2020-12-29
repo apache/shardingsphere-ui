@@ -44,6 +44,7 @@ const mergeEN = locales['en-US']
 
 const i18n = new VueI18n({
   locale: lang,
+  silentFallbackWarn: true,
   messages: {
     'zh-CN': mergeZH,
     'en-US': mergeEN
