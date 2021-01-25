@@ -45,7 +45,7 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
 
     @Override
     public Collection<String> getAllSchemaNames() {
-        return configCenterService.getActivatedConfigCenter().getChildrenKeys(configCenterService.getActivateConfigurationNode().getSchemasPath());
+        return configCenterService.getActivatedConfigCenter().getChildrenKeys(configCenterService.getActivateConfigurationNode().getMetadataNodePath());
     }
     
     @Override
@@ -85,16 +85,16 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
         ConfigurationRepository configCenterRepository = configCenterService.getActivatedConfigCenter();
         String schemaNamePath = configCenterService.getActivateConfigurationNode().getSchemaNamePath(schemaName);
         configCenterRepository.delete(schemaNamePath);
-        String schemaNames = configCenterRepository.get(configCenterService.getActivateConfigurationNode().getSchemasPath());
+        String schemaNames = configCenterRepository.get(configCenterService.getActivateConfigurationNode().getMetadataNodePath());
         List<String> schemaNameList = new ArrayList<>(Splitter.on(",").splitToList(schemaNames));
         schemaNameList.remove(schemaName);
-        configCenterRepository.persist(configCenterService.getActivateConfigurationNode().getSchemasPath(), Joiner.on(",").join(schemaNameList));
+        configCenterRepository.persist(configCenterService.getActivateConfigurationNode().getMetadataNodePath(), Joiner.on(",").join(schemaNameList));
     }
 
     @Override
     public String getMetadataConfiguration(final String schemaName) {
         return configCenterService.getActivatedConfigCenter().get(
-                configCenterService.getActivateConfigurationNode().getTablePath(schemaName));
+                configCenterService.getActivateConfigurationNode().getSchemaPath(schemaName));
     }
 
     private void checkRuleConfiguration(final String configData) {
@@ -118,7 +118,7 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {
             // CHECKSTYLE:ON
-            throw new IllegalArgumentException("data source configuration is invalid.");
+            throw new IllegalArgumentException("data source configuration is invalid.", ex);
         }
     }
     
@@ -133,7 +133,7 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
     
     private void persistSchemaName(final String schemaName) {
         ConfigurationRepository configCenterRepository = configCenterService.getActivatedConfigCenter();
-        String schemaPath = configCenterService.getActivateConfigurationNode().getSchemasPath();
+        String schemaPath = configCenterService.getActivateConfigurationNode().getMetadataNodePath();
         String schemaNames = configCenterRepository.get(schemaPath);
         List<String> schemaNameList = Strings.isNullOrEmpty(schemaNames) ? new ArrayList<>() : new ArrayList<>(Splitter.on(",").splitToList(schemaNames));
         if (!schemaNameList.contains(schemaName)) {
