@@ -44,7 +44,7 @@
         <os-maven-plugin.version>1.5.0.Final</os-maven-plugin.version>
         <takari-maven-plugin.version>0.6.1</takari-maven-plugin.version>
         <guava.version>20.0</guava.version>
-        <shardingsphere.version>5.0.0-alpha</shardingsphere.version>
+        <shardingsphere.version>5.0.0-RC1-SNAPSHOT</shardingsphere.version>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
     
@@ -70,7 +70,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>shardingsphere-governance-core-facade</artifactId>
+                <artifactId>shardingsphere-governance-core</artifactId>
                 <version>${shardingsphere.version}</version>
             </dependency>
             <dependency>
