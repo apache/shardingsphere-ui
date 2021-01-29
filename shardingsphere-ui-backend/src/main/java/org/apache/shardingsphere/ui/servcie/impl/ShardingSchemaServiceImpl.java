@@ -21,11 +21,11 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import org.apache.shardingsphere.governance.core.yaml.config.YamlConfigurationConverter;
 import org.apache.shardingsphere.governance.repository.api.ConfigurationRepository;
 import org.apache.shardingsphere.infra.config.datasource.DataSourceConfiguration;
 import org.apache.shardingsphere.ui.servcie.ConfigCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingSchemaService;
-import org.apache.shardingsphere.ui.util.ConfigurationYamlConverter;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -99,7 +99,7 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
 
     private void checkRuleConfiguration(final String configData) {
         try {
-            ConfigurationYamlConverter.loadRuleConfigurations(configData);
+            YamlConfigurationConverter.convertRuleConfigurations(configData);
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {
             // CHECKSTYLE:ON
@@ -113,7 +113,7 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
     
     private void checkDataSourceConfiguration(final String configData) {
         try {
-            Map<String, DataSourceConfiguration> dataSourceConfigs = ConfigurationYamlConverter.loadDataSourceConfigurations(configData);
+            Map<String, DataSourceConfiguration> dataSourceConfigs = YamlConfigurationConverter.convertDataSourceConfigurations(configData);
             Preconditions.checkState(!dataSourceConfigs.isEmpty(), "data source configuration is invalid.");
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {

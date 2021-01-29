@@ -17,9 +17,9 @@
 
 package org.apache.shardingsphere.ui.servcie.impl;
 
+import org.apache.shardingsphere.governance.core.yaml.config.YamlConfigurationConverter;
 import org.apache.shardingsphere.ui.servcie.ConfigCenterService;
 import org.apache.shardingsphere.ui.servcie.ProxyAuthenticationService;
-import org.apache.shardingsphere.ui.util.ConfigurationYamlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +46,7 @@ public final class ProxyAuthenticationServiceImpl implements ProxyAuthentication
     
     private void checkAuthenticationConfiguration(final String data) {
         try {
-            ConfigurationYamlConverter.loadAuthentication(data);
+            YamlConfigurationConverter.convertAuthentication(data);
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {
             // CHECKSTYLE:ON
