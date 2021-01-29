@@ -17,10 +17,10 @@
 
 package org.apache.shardingsphere.ui.servcie.impl;
 
+import org.apache.shardingsphere.governance.core.yaml.config.YamlConfigurationConverter;
 import org.apache.shardingsphere.infra.config.properties.ConfigurationProperties;
 import org.apache.shardingsphere.ui.servcie.ConfigCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingPropertiesService;
-import org.apache.shardingsphere.ui.util.ConfigurationYamlConverter;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -48,7 +48,7 @@ public final class ShardingPropertiesServiceImpl implements ShardingPropertiesSe
     
     private void checkShardingProperties(final String configData) {
         try {
-            Properties props = ConfigurationYamlConverter.loadProperties(configData);
+            Properties props = YamlConfigurationConverter.convertProperties(configData);
             new ConfigurationProperties(props);
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {
