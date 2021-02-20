@@ -46,7 +46,7 @@ public final class ProxyAuthenticationServiceImpl implements ProxyAuthentication
     
     private void checkAuthenticationConfiguration(final String data) {
         try {
-            YamlConfigurationConverter.convertAuthentication(data);
+            YamlConfigurationConverter.convertUserRule(data);
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {
             // CHECKSTYLE:ON
