@@ -39,12 +39,6 @@ public final class CenterConfig {
     
     private String digest;
     
-    private String additionalConfigCenterType;
-    
-    private String additionalConfigCenterServerList;
-    
-    private String additionalDigest;
-    
     private boolean activated;
     
     private Properties props = new Properties();
