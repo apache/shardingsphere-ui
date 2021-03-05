@@ -17,10 +17,8 @@
 
 package org.apache.shardingsphere.ui.util;
 
-import com.google.common.base.Strings;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.shardingsphere.governance.repository.api.ConfigurationRepository;
 import org.apache.shardingsphere.governance.repository.api.GovernanceRepository;
 import org.apache.shardingsphere.governance.repository.api.RegistryRepository;
 import org.apache.shardingsphere.governance.repository.api.config.GovernanceCenterConfiguration;
@@ -40,8 +38,6 @@ public final class CenterRepositoryFactory {
     
     private static final ConcurrentHashMap<String, RegistryRepository> REGISTRY_REPOSITORY_MAP = new ConcurrentHashMap<>();
     
-    private static final ConcurrentHashMap<String, ConfigurationRepository> CONFIG_REPOSITORY_MAP = new ConcurrentHashMap<>();
-    
     /**
      * Create registry repository.
      *
@@ -56,33 +52,6 @@ public final class CenterRepositoryFactory {
         result = (RegistryRepository) createGovernanceRepository(config.getInstanceType());
         result.init(config.getGovernanceName(), convert(config));
         REGISTRY_REPOSITORY_MAP.put(config.getName(), result);
-        return result;
-    }
-    
-    /**
-     * Create configuration repository.
-     * 
-     * @param config center config
-     * @return configuration repository
-     */
-    public static ConfigurationRepository createConfigurationRepository(final CenterConfig config) {
-        ConfigurationRepository result = CONFIG_REPOSITORY_MAP.get(config.getName());
-        if (null != result) {
-            return result;
-        }
-        if (!Strings.isNullOrEmpty(config.getAdditionalConfigCenterServerList())
-                && !Strings.isNullOrEmpty(config.getAdditionalConfigCenterType())) {
-            result = (ConfigurationRepository) createGovernanceRepository(config.getAdditionalConfigCenterType());
-        } else {
-            RegistryRepository registryRepository = (RegistryRepository) createGovernanceRepository(config.getInstanceType());
-            if (registryRepository instanceof  ConfigurationRepository) {
-                result = (ConfigurationRepository) registryRepository;
-            } else {
-                throw new IllegalArgumentException("Registry repository is not suitable for config center and no additional config center configuration provided.");
-            }
-        }
-        result.init(config.getGovernanceName(), convert(config));
-        CONFIG_REPOSITORY_MAP.put(config.getName(), result);
         return result;
     }
     

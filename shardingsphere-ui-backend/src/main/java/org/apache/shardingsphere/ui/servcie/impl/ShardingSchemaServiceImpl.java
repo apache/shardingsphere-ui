@@ -22,9 +22,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import org.apache.shardingsphere.governance.core.yaml.config.YamlConfigurationConverter;
-import org.apache.shardingsphere.governance.repository.api.ConfigurationRepository;
+import org.apache.shardingsphere.governance.repository.api.RegistryRepository;
 import org.apache.shardingsphere.infra.config.datasource.DataSourceConfiguration;
-import org.apache.shardingsphere.ui.servcie.ConfigCenterService;
+import org.apache.shardingsphere.ui.servcie.RegistryCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingSchemaService;
 import org.springframework.stereotype.Service;
 
@@ -41,21 +41,21 @@ import java.util.Map;
 public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
 
     @Resource
-    private ConfigCenterService configCenterService;
+    private RegistryCenterService registryCenterService;
 
     @Override
     public Collection<String> getAllSchemaNames() {
-        return configCenterService.getActivatedConfigCenter().getChildrenKeys(configCenterService.getActivateConfigurationNode().getMetadataNodePath());
+        return registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getMetadataNodePath());
     }
     
     @Override
     public String getRuleConfiguration(final String schemaName) {
-        return configCenterService.getActivatedConfigCenter().get(configCenterService.getActivateConfigurationNode().getRulePath(schemaName));
+        return registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getRulePath(schemaName));
     }
     
     @Override
     public String getDataSourceConfiguration(final String schemaName) {
-        return configCenterService.getActivatedConfigCenter().get(configCenterService.getActivateConfigurationNode().getDataSourcePath(schemaName));
+        return registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getMetadataDataSourcePath(schemaName));
     }
     
     @Override
@@ -82,19 +82,19 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
     
     @Override
     public void deleteSchemaConfiguration(final String schemaName) {
-        ConfigurationRepository configCenterRepository = configCenterService.getActivatedConfigCenter();
-        String schemaNamePath = configCenterService.getActivateConfigurationNode().getSchemaNamePath(schemaName);
-        configCenterRepository.delete(schemaNamePath);
-        String schemaNames = configCenterRepository.get(configCenterService.getActivateConfigurationNode().getMetadataNodePath());
+        RegistryRepository registryRepository = registryCenterService.getActivatedRegistryCenter();
+        String schemaNamePath = registryCenterService.getActivatedStateNode().getSchemaNamePath(schemaName);
+        registryRepository.delete(schemaNamePath);
+        String schemaNames = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getMetadataNodePath());
         List<String> schemaNameList = new ArrayList<>(Splitter.on(",").splitToList(schemaNames));
         schemaNameList.remove(schemaName);
-        configCenterRepository.persist(configCenterService.getActivateConfigurationNode().getMetadataNodePath(), Joiner.on(",").join(schemaNameList));
+        registryRepository.persist(registryCenterService.getActivatedStateNode().getMetadataNodePath(), Joiner.on(",").join(schemaNameList));
     }
 
     @Override
     public String getMetadataConfiguration(final String schemaName) {
-        return configCenterService.getActivatedConfigCenter().get(
-                configCenterService.getActivateConfigurationNode().getSchemaPath(schemaName));
+        return registryCenterService.getActivatedRegistryCenter().get(
+                registryCenterService.getActivatedStateNode().getSchemaPath(schemaName));
     }
 
     private void checkRuleConfiguration(final String configData) {
@@ -108,7 +108,7 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
     }
     
     private void persistRuleConfiguration(final String schemaName, final String ruleConfiguration) {
-        configCenterService.getActivatedConfigCenter().persist(configCenterService.getActivateConfigurationNode().getRulePath(schemaName), ruleConfiguration);
+        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getRulePath(schemaName), ruleConfiguration);
     }
     
     private void checkDataSourceConfiguration(final String configData) {
@@ -123,7 +123,7 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
     }
     
     private void persistDataSourceConfiguration(final String schemaName, final String dataSourceConfiguration) {
-        configCenterService.getActivatedConfigCenter().persist(configCenterService.getActivateConfigurationNode().getDataSourcePath(schemaName), dataSourceConfiguration);
+        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getMetadataDataSourcePath(schemaName), dataSourceConfiguration);
     }
     
     private void checkSchemaName(final String schemaName, final Collection<String> existedSchemaNames) {
@@ -132,13 +132,13 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
     }
     
     private void persistSchemaName(final String schemaName) {
-        ConfigurationRepository configCenterRepository = configCenterService.getActivatedConfigCenter();
-        String schemaPath = configCenterService.getActivateConfigurationNode().getMetadataNodePath();
-        String schemaNames = configCenterRepository.get(schemaPath);
+        RegistryRepository registryRepository = registryCenterService.getActivatedRegistryCenter();
+        String schemaPath = registryCenterService.getActivatedStateNode().getMetadataNodePath();
+        String schemaNames = registryRepository.get(schemaPath);
         List<String> schemaNameList = Strings.isNullOrEmpty(schemaNames) ? new ArrayList<>() : new ArrayList<>(Splitter.on(",").splitToList(schemaNames));
         if (!schemaNameList.contains(schemaName)) {
             schemaNameList.add(schemaName);
-            configCenterRepository.persist(schemaPath, Joiner.on(",").join(schemaNameList));
+            registryRepository.persist(schemaPath, Joiner.on(",").join(schemaNameList));
         }
     }
 }
