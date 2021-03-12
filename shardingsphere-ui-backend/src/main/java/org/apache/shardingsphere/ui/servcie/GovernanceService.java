@@ -18,7 +18,7 @@
 package org.apache.shardingsphere.ui.servcie;
 
 import org.apache.shardingsphere.ui.common.dto.InstanceDTO;
-import org.apache.shardingsphere.ui.common.dto.ReplicaDataSourceDTO;
+import org.apache.shardingsphere.ui.common.dto.ReadDataSourceDTO;
 
 import java.util.Collection;
 
@@ -43,18 +43,18 @@ public interface GovernanceService {
     void updateInstanceStatus(String instanceId, boolean enabled);
     
     /**
-     * Get all replica data source.
+     * Get all read data source.
      *
-     * @return all replica data source dto
+     * @return all read data source dto
      */
-    Collection<ReplicaDataSourceDTO> getAllReplicaDataSource();
+    Collection<ReadDataSourceDTO> getAllReadDataSource();
     
     /**
-     * update replica data source status.
+     * update read data source status.
      *
      * @param schemaNames schema name
-     * @param replicaDataSourceName replica data source name
+     * @param readDataSourceName read data source name
      * @param enabled enabled
      */
-    void updateReplicaDataSourceStatus(String schemaNames, String replicaDataSourceName, boolean enabled);
+    void updateReadDataSourceStatus(String schemaNames, String readDataSourceName, boolean enabled);
 }

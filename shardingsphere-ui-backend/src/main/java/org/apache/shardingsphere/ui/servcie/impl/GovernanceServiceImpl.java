@@ -25,7 +25,7 @@ import org.apache.shardingsphere.infra.config.RuleConfiguration;
 import org.apache.shardingsphere.readwrite.splitting.api.ReadWriteSplittingRuleConfiguration;
 import org.apache.shardingsphere.readwrite.splitting.api.rule.ReadWriteSplittingDataSourceRuleConfiguration;
 import org.apache.shardingsphere.ui.common.dto.InstanceDTO;
-import org.apache.shardingsphere.ui.common.dto.ReplicaDataSourceDTO;
+import org.apache.shardingsphere.ui.common.dto.ReadDataSourceDTO;
 import org.apache.shardingsphere.ui.servcie.GovernanceService;
 import org.apache.shardingsphere.ui.servcie.RegistryCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingSchemaService;
@@ -70,8 +70,8 @@ public final class GovernanceServiceImpl implements GovernanceService {
     }
     
     @Override
-    public Collection<ReplicaDataSourceDTO> getAllReplicaDataSource() {
-        Collection<ReplicaDataSourceDTO> result = new ArrayList<>();
+    public Collection<ReadDataSourceDTO> getAllReadDataSource() {
+        Collection<ReadDataSourceDTO> result = new ArrayList<>();
         for (String schemaName : shardingSchemaService.getAllSchemaNames()) {
             String configData = shardingSchemaService.getRuleConfiguration(schemaName);
             if (StringUtils.isEmpty(configData)) {
@@ -87,9 +87,9 @@ public final class GovernanceServiceImpl implements GovernanceService {
     }
     
     @Override
-    public void updateReplicaDataSourceStatus(final String schemaNames, final String replicaDataSourceName, final boolean enabled) {
+    public void updateReadDataSourceStatus(final String schemaNames, final String readDataSourceName, final boolean enabled) {
         String value = enabled ? "" : RegistryCenterNodeStatus.DISABLED.toString();
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getDataSourcePath(schemaNames, replicaDataSourceName), value);
+        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getDataSourcePath(schemaNames, readDataSourceName), value);
     }
     
     private String getInstancesNodeFullRootPath() {
@@ -97,21 +97,21 @@ public final class GovernanceServiceImpl implements GovernanceService {
         return result.substring(0, result.length() - 1);
     }
     
-    private void handleShardingRuleConfiguration(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final String configData, final String schemaName) {
+    private void handleShardingRuleConfiguration(final Collection<ReadDataSourceDTO> readDataSourceDTOS, final String configData, final String schemaName) {
         Collection<RuleConfiguration> configurations = YamlConfigurationConverter.convertRuleConfigurations(configData);
         Collection<ReadWriteSplittingRuleConfiguration> readWriteSplittingRuleConfigurations = configurations.stream().filter(
             config -> config instanceof ReadWriteSplittingRuleConfiguration).map(config -> (ReadWriteSplittingRuleConfiguration) config).collect(Collectors.toList());
         for (ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration : readWriteSplittingRuleConfigurations) {
-            addSlaveDataSource(replicaDataSourceDTOS, readWriteSplittingRuleConfiguration, schemaName);
+            addSlaveDataSource(readDataSourceDTOS, readWriteSplittingRuleConfiguration, schemaName);
         }
     }
     
-    private void handleMasterSlaveRuleConfiguration(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final String configData, final String schemaName) {
-        ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration = loadPrimaryReplicaRuleConfiguration(configData);
-        addSlaveDataSource(replicaDataSourceDTOS, readWriteSplittingRuleConfiguration, schemaName);
+    private void handleMasterSlaveRuleConfiguration(final Collection<ReadDataSourceDTO> readDataSourceDTOS, final String configData, final String schemaName) {
+        ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration = loadPrimaryReadRuleConfiguration(configData);
+        addSlaveDataSource(readDataSourceDTOS, readWriteSplittingRuleConfiguration, schemaName);
     }
     
-    private ReadWriteSplittingRuleConfiguration loadPrimaryReplicaRuleConfiguration(final String configData) {
+    private ReadWriteSplittingRuleConfiguration loadPrimaryReadRuleConfiguration(final String configData) {
         Collection<RuleConfiguration> ruleConfigurations = YamlConfigurationConverter.convertRuleConfigurations(configData);
         Optional<ReadWriteSplittingRuleConfiguration> result = ruleConfigurations.stream().filter(
                 each -> each instanceof ReadWriteSplittingRuleConfiguration).map(ruleConfiguration -> (ReadWriteSplittingRuleConfiguration) ruleConfiguration).findFirst();
@@ -119,17 +119,17 @@ public final class GovernanceServiceImpl implements GovernanceService {
         return result.get();
     }
     
-    private void addSlaveDataSource(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration, final String schemaName) {
+    private void addSlaveDataSource(final Collection<ReadDataSourceDTO> readDataSourceDTOS, final ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration, final String schemaName) {
         Collection<String> disabledSchemaDataSourceNames = getDisabledSchemaDataSourceNames();
         for (ReadWriteSplittingDataSourceRuleConfiguration each : readWriteSplittingRuleConfiguration.getDataSources()) {
-            replicaDataSourceDTOS.addAll(getReplicaDataSourceDTOS(schemaName, disabledSchemaDataSourceNames, each));
+            readDataSourceDTOS.addAll(getReadDataSourceDTOS(schemaName, disabledSchemaDataSourceNames, each));
         }
     }
     
-    private Collection<ReplicaDataSourceDTO> getReplicaDataSourceDTOS(final String schemaName, final Collection<String> disabledSchemaDataSourceNames, final ReadWriteSplittingDataSourceRuleConfiguration group) {
-        Collection<ReplicaDataSourceDTO> result = new LinkedList<>();
+    private Collection<ReadDataSourceDTO> getReadDataSourceDTOS(final String schemaName, final Collection<String> disabledSchemaDataSourceNames, final ReadWriteSplittingDataSourceRuleConfiguration group) {
+        Collection<ReadDataSourceDTO> result = new LinkedList<>();
         for (String each : group.getReadDataSourceNames()) {
-            result.add(new ReplicaDataSourceDTO(schemaName, group.getWriteDataSourceName(), each, !disabledSchemaDataSourceNames.contains(schemaName + "." + each)));
+            result.add(new ReadDataSourceDTO(schemaName, group.getWriteDataSourceName(), each, !disabledSchemaDataSourceNames.contains(schemaName + "." + each)));
         }
         return result;
     }

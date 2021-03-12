@@ -413,7 +413,7 @@ export default {
         }
       )
       const masterSlaveYamlType = new yaml.Type(
-        '!PRIMARY_REPLICA_REPLICATION',
+        '!READ_WRITE_SPLITTING',
         {
           kind: 'mapping',
           construct(data) {
