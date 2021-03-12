@@ -56,11 +56,11 @@ export default {
           prop: 'schema'
         },
         {
-          label: this.$t('runtimeStatus').dataSource.masterDataSourceName,
+          label: this.$t('runtimeStatus').dataSource.writeDataSourceName,
           prop: 'primaryDataSourceName'
         },
         {
-          label: this.$t('runtimeStatus').dataSource.replicaDataSourceName,
+          label: this.$t('runtimeStatus').dataSource.readDataSourceName,
           prop: 'replicaDataSourceName'
         }
       ],

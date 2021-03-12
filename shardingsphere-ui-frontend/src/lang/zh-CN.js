@@ -117,11 +117,11 @@ export default {
   },
   runtimeStatus: {
     serviceNode: '服务节点',
-    replicaDataSourceName: '从库信息',
+    readDataSourceName: '读库信息',
     dataSource: {
       schema: '逻辑库名',
-      masterDataSourceName: '主库名',
-      replicaDataSourceName: '从库名'
+      writeDataSourceName: '写库名',
+      readDataSourceName: '读库名'
     },
     instance: {
       instanceId: '节点标识',
