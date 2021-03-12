@@ -22,8 +22,8 @@ import com.google.common.base.Preconditions;
 import org.apache.shardingsphere.governance.core.registry.RegistryCenterNodeStatus;
 import org.apache.shardingsphere.governance.core.yaml.config.YamlConfigurationConverter;
 import org.apache.shardingsphere.infra.config.RuleConfiguration;
-import org.apache.shardingsphere.replicaquery.api.config.ReplicaQueryRuleConfiguration;
-import org.apache.shardingsphere.replicaquery.api.config.rule.ReplicaQueryDataSourceRuleConfiguration;
+import org.apache.shardingsphere.readwrite.splitting.api.ReadWriteSplittingRuleConfiguration;
+import org.apache.shardingsphere.readwrite.splitting.api.rule.ReadWriteSplittingDataSourceRuleConfiguration;
 import org.apache.shardingsphere.ui.common.dto.InstanceDTO;
 import org.apache.shardingsphere.ui.common.dto.ReplicaDataSourceDTO;
 import org.apache.shardingsphere.ui.servcie.GovernanceService;
@@ -79,7 +79,7 @@ public final class GovernanceServiceImpl implements GovernanceService {
             }
             if (configData.contains("!SHARDING")) {
                 handleShardingRuleConfiguration(result, configData, schemaName);
-            } else if (configData.contains("!REPLICA_QUERY")) {
+            } else if (configData.contains("!READ_WRITE_SPLITTING")) {
                 handleMasterSlaveRuleConfiguration(result, configData, schemaName);
             }
         }
@@ -99,37 +99,37 @@ public final class GovernanceServiceImpl implements GovernanceService {
     
     private void handleShardingRuleConfiguration(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final String configData, final String schemaName) {
         Collection<RuleConfiguration> configurations = YamlConfigurationConverter.convertRuleConfigurations(configData);
-        Collection<ReplicaQueryRuleConfiguration> replicaQueryRuleConfigurations = configurations.stream().filter(
-            config -> config instanceof ReplicaQueryRuleConfiguration).map(config -> (ReplicaQueryRuleConfiguration) config).collect(Collectors.toList());
-        for (ReplicaQueryRuleConfiguration replicaQueryRuleConfiguration : replicaQueryRuleConfigurations) {
-            addSlaveDataSource(replicaDataSourceDTOS, replicaQueryRuleConfiguration, schemaName);
+        Collection<ReadWriteSplittingRuleConfiguration> readWriteSplittingRuleConfigurations = configurations.stream().filter(
+            config -> config instanceof ReadWriteSplittingRuleConfiguration).map(config -> (ReadWriteSplittingRuleConfiguration) config).collect(Collectors.toList());
+        for (ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration : readWriteSplittingRuleConfigurations) {
+            addSlaveDataSource(replicaDataSourceDTOS, readWriteSplittingRuleConfiguration, schemaName);
         }
     }
     
     private void handleMasterSlaveRuleConfiguration(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final String configData, final String schemaName) {
-        ReplicaQueryRuleConfiguration replicaQueryRuleConfiguration = loadPrimaryReplicaRuleConfiguration(configData);
-        addSlaveDataSource(replicaDataSourceDTOS, replicaQueryRuleConfiguration, schemaName);
+        ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration = loadPrimaryReplicaRuleConfiguration(configData);
+        addSlaveDataSource(replicaDataSourceDTOS, readWriteSplittingRuleConfiguration, schemaName);
     }
     
-    private ReplicaQueryRuleConfiguration loadPrimaryReplicaRuleConfiguration(final String configData) {
+    private ReadWriteSplittingRuleConfiguration loadPrimaryReplicaRuleConfiguration(final String configData) {
         Collection<RuleConfiguration> ruleConfigurations = YamlConfigurationConverter.convertRuleConfigurations(configData);
-        Optional<ReplicaQueryRuleConfiguration> result = ruleConfigurations.stream().filter(
-                each -> each instanceof ReplicaQueryRuleConfiguration).map(ruleConfiguration -> (ReplicaQueryRuleConfiguration) ruleConfiguration).findFirst();
+        Optional<ReadWriteSplittingRuleConfiguration> result = ruleConfigurations.stream().filter(
+                each -> each instanceof ReadWriteSplittingRuleConfiguration).map(ruleConfiguration -> (ReadWriteSplittingRuleConfiguration) ruleConfiguration).findFirst();
         Preconditions.checkState(result.isPresent());
         return result.get();
     }
     
-    private void addSlaveDataSource(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final ReplicaQueryRuleConfiguration replicaQueryRuleConfiguration, final String schemaName) {
+    private void addSlaveDataSource(final Collection<ReplicaDataSourceDTO> replicaDataSourceDTOS, final ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration, final String schemaName) {
         Collection<String> disabledSchemaDataSourceNames = getDisabledSchemaDataSourceNames();
-        for (ReplicaQueryDataSourceRuleConfiguration each : replicaQueryRuleConfiguration.getDataSources()) {
+        for (ReadWriteSplittingDataSourceRuleConfiguration each : readWriteSplittingRuleConfiguration.getDataSources()) {
             replicaDataSourceDTOS.addAll(getReplicaDataSourceDTOS(schemaName, disabledSchemaDataSourceNames, each));
         }
     }
     
-    private Collection<ReplicaDataSourceDTO> getReplicaDataSourceDTOS(final String schemaName, final Collection<String> disabledSchemaDataSourceNames, final ReplicaQueryDataSourceRuleConfiguration group) {
+    private Collection<ReplicaDataSourceDTO> getReplicaDataSourceDTOS(final String schemaName, final Collection<String> disabledSchemaDataSourceNames, final ReadWriteSplittingDataSourceRuleConfiguration group) {
         Collection<ReplicaDataSourceDTO> result = new LinkedList<>();
-        for (String each : group.getReplicaDataSourceNames()) {
-            result.add(new ReplicaDataSourceDTO(schemaName, group.getPrimaryDataSourceName(), each, !disabledSchemaDataSourceNames.contains(schemaName + "." + each)));
+        for (String each : group.getReadDataSourceNames()) {
+            result.add(new ReplicaDataSourceDTO(schemaName, group.getWriteDataSourceName(), each, !disabledSchemaDataSourceNames.contains(schemaName + "." + each)));
         }
         return result;
     }

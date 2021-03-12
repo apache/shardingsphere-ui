@@ -117,11 +117,11 @@ export default {
   },
   runtimeStatus: {
     serviceNode: 'Service Node',
-    replicaDataSourceName: 'Replica DataSource Info',
+    readDataSourceName: 'Read DataSource Info',
     dataSource: {
       schema: 'Schema',
-      masterDataSourceName: 'Primary DataSource Name',
-      replicaDataSourceName: 'Replica DataSource Name'
+      writeDataSourceName: 'Write DataSource Name',
+      readDataSourceName: 'Read DataSource Name'
     },
     instance: {
       instanceId: 'Instance Id',
