@@ -57,11 +57,11 @@ export default {
         },
         {
           label: this.$t('runtimeStatus').dataSource.writeDataSourceName,
-          prop: 'primaryDataSourceName'
+          prop: 'writeDataSourceName'
         },
         {
           label: this.$t('runtimeStatus').dataSource.readDataSourceName,
-          prop: 'replicaDataSourceName'
+          prop: 'readDataSourceName'
         }
       ],
       tableData: [],

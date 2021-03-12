@@ -18,7 +18,7 @@
 package org.apache.shardingsphere.ui.web.controller;
 
 import org.apache.shardingsphere.ui.common.dto.InstanceDTO;
-import org.apache.shardingsphere.ui.common.dto.ReplicaDataSourceDTO;
+import org.apache.shardingsphere.ui.common.dto.ReadDataSourceDTO;
 import org.apache.shardingsphere.ui.servcie.GovernanceService;
 import org.apache.shardingsphere.ui.web.response.ResponseResult;
 import org.apache.shardingsphere.ui.web.response.ResponseResultUtil;
@@ -63,24 +63,24 @@ public final class GovernanceController {
     }
     
     /**
-     * Load all replica data sources.
+     * Load all read data sources.
      *
      * @return response result
      */
     @RequestMapping(value = "/datasource", method = RequestMethod.GET)
-    public ResponseResult<Collection<ReplicaDataSourceDTO>> loadAllReplicaDataSources() {
-        return ResponseResultUtil.build(governanceService.getAllReplicaDataSource());
+    public ResponseResult<Collection<ReadDataSourceDTO>> loadAllReadDataSources() {
+        return ResponseResultUtil.build(governanceService.getAllReadDataSource());
     }
     
     /**
-     * Update replica data source status.
+     * Update read data source status.
      *
-     * @param replicaDataSourceDTO replica data source DTO
+     * @param readDataSourceDTO read data source DTO
      * @return response result
      */
     @RequestMapping(value = "/datasource", method = RequestMethod.PUT)
-    public ResponseResult updateReplicaDataSourceStatus(@RequestBody final ReplicaDataSourceDTO replicaDataSourceDTO) {
-        governanceService.updateReplicaDataSourceStatus(replicaDataSourceDTO.getSchema(), replicaDataSourceDTO.getReplicaDataSourceName(), replicaDataSourceDTO.isEnabled());
+    public ResponseResult updateReadDataSourceStatus(@RequestBody final ReadDataSourceDTO readDataSourceDTO) {
+        governanceService.updateReadDataSourceStatus(readDataSourceDTO.getSchema(), readDataSourceDTO.getReadDataSourceName(), readDataSourceDTO.isEnabled());
         return ResponseResultUtil.success();
     }
     

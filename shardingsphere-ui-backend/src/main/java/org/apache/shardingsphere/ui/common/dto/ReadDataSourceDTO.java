@@ -23,19 +23,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Replica data source DTO.
+ * Read data source DTO.
  */
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public final class ReplicaDataSourceDTO {
+public final class ReadDataSourceDTO {
     
     private String schema;
     
-    private String primaryDataSourceName;
+    private String writeDataSourceName;
     
-    private String replicaDataSourceName;
+    private String readDataSourceName;
     
     private boolean enabled;
     
