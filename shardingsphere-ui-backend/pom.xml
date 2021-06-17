@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.apache.shardingsphere</groupId>
         <artifactId>shardingsphere-ui</artifactId>
-        <version>5.0.0-beta-SNAPSHOT</version>
+        <version>5.0.0-RC1-SNAPSHOT</version>
     </parent>
     <artifactId>shardingsphere-ui-backend</artifactId>
     <name>${project.artifactId}</name>
@@ -44,6 +44,22 @@
                     <artifactId>shardingsphere-sql-parser-binder</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>shardingsphere-readwrite-splitting-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>shardingsphere-encrypt-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>shardingsphere-db-discovery-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>shardingsphere-shadow-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.shardingsphere</groupId>

@@ -21,9 +21,11 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import org.apache.shardingsphere.governance.core.yaml.config.YamlConfigurationConverter;
-import org.apache.shardingsphere.governance.repository.api.RegistryRepository;
+import org.apache.shardingsphere.governance.core.registry.config.node.SchemaMetadataNode;
+import org.apache.shardingsphere.governance.repository.spi.RegistryCenterRepository;
 import org.apache.shardingsphere.infra.config.datasource.DataSourceConfiguration;
+import org.apache.shardingsphere.infra.yaml.engine.YamlEngine;
+import org.apache.shardingsphere.infra.yaml.swapper.YamlDataSourceConfigurationSwapper;
 import org.apache.shardingsphere.ui.servcie.RegistryCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingSchemaService;
 import org.springframework.stereotype.Service;
@@ -31,8 +33,11 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of sharding schema service.
@@ -45,17 +50,17 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
 
     @Override
     public Collection<String> getAllSchemaNames() {
-        return registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getMetadataNodePath());
+        return registryCenterService.getActivatedRegistryCenter().getChildrenKeys(SchemaMetadataNode.getMetadataNodePath());
     }
     
     @Override
     public String getRuleConfiguration(final String schemaName) {
-        return registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getRulePath(schemaName));
+        return registryCenterService.getActivatedRegistryCenter().get(SchemaMetadataNode.getRulePath(schemaName));
     }
     
     @Override
     public String getDataSourceConfiguration(final String schemaName) {
-        return registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getMetadataDataSourcePath(schemaName));
+        return registryCenterService.getActivatedRegistryCenter().get(SchemaMetadataNode.getMetadataDataSourcePath(schemaName));
     }
     
     @Override
@@ -77,29 +82,28 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
         checkDataSourceConfiguration(dataSourceConfiguration);
         persistRuleConfiguration(schemaName, ruleConfiguration);
         persistDataSourceConfiguration(schemaName, dataSourceConfiguration);
-        persistSchemaName(schemaName);
     }
     
     @Override
     public void deleteSchemaConfiguration(final String schemaName) {
-        RegistryRepository registryRepository = registryCenterService.getActivatedRegistryCenter();
-        String schemaNamePath = registryCenterService.getActivatedStateNode().getSchemaNamePath(schemaName);
+        RegistryCenterRepository registryRepository = registryCenterService.getActivatedRegistryCenter();
+        String schemaNamePath = SchemaMetadataNode.getSchemaNamePath(schemaName);
         registryRepository.delete(schemaNamePath);
-        String schemaNames = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getMetadataNodePath());
+        String schemaNames = registryCenterService.getActivatedRegistryCenter().get(SchemaMetadataNode.getMetadataNodePath());
         List<String> schemaNameList = new ArrayList<>(Splitter.on(",").splitToList(schemaNames));
         schemaNameList.remove(schemaName);
-        registryRepository.persist(registryCenterService.getActivatedStateNode().getMetadataNodePath(), Joiner.on(",").join(schemaNameList));
+        registryRepository.persist(SchemaMetadataNode.getMetadataNodePath(), Joiner.on(",").join(schemaNameList));
     }
 
     @Override
     public String getMetadataConfiguration(final String schemaName) {
         return registryCenterService.getActivatedRegistryCenter().get(
-                registryCenterService.getActivatedStateNode().getSchemaPath(schemaName));
+                SchemaMetadataNode.getMetadataSchemaPath(schemaName));
     }
 
     private void checkRuleConfiguration(final String configData) {
         try {
-            YamlConfigurationConverter.convertRuleConfigurations(configData);
+            YamlEngine.unmarshal(configData, Collection.class);
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {
             // CHECKSTYLE:ON
@@ -108,13 +112,16 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
     }
     
     private void persistRuleConfiguration(final String schemaName, final String ruleConfiguration) {
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getRulePath(schemaName), ruleConfiguration);
+        registryCenterService.getActivatedRegistryCenter().persist(SchemaMetadataNode.getRulePath(schemaName), ruleConfiguration);
     }
     
     private void checkDataSourceConfiguration(final String configData) {
         try {
-            Map<String, DataSourceConfiguration> dataSourceConfigs = YamlConfigurationConverter.convertDataSourceConfigurations(configData);
-            Preconditions.checkState(!dataSourceConfigs.isEmpty(), "data source configuration is invalid.");
+            Map<String, Map<String, Object>> yamlDataSources = YamlEngine.unmarshal(configData, Map.class);
+            Map<String, DataSourceConfiguration> dataSourceConfigs = yamlDataSources.isEmpty() ? new HashMap<>()
+                    : yamlDataSources.entrySet().stream().collect(Collectors.toMap(
+                    Map.Entry::getKey, entry -> new YamlDataSourceConfigurationSwapper().swapToDataSourceConfiguration(entry.getValue()), (oldValue, currentValue) -> oldValue, LinkedHashMap::new));
+            Preconditions.checkState(!dataSourceConfigs.isEmpty());
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {
             // CHECKSTYLE:ON
@@ -123,22 +130,11 @@ public final class ShardingSchemaServiceImpl implements ShardingSchemaService {
     }
     
     private void persistDataSourceConfiguration(final String schemaName, final String dataSourceConfiguration) {
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getMetadataDataSourcePath(schemaName), dataSourceConfiguration);
+        registryCenterService.getActivatedRegistryCenter().persist(SchemaMetadataNode.getMetadataDataSourcePath(schemaName), dataSourceConfiguration);
     }
     
     private void checkSchemaName(final String schemaName, final Collection<String> existedSchemaNames) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(schemaName), "schema name is invalid.");
         Preconditions.checkArgument(!existedSchemaNames.contains(schemaName), "schema name already exists.");
-    }
-    
-    private void persistSchemaName(final String schemaName) {
-        RegistryRepository registryRepository = registryCenterService.getActivatedRegistryCenter();
-        String schemaPath = registryCenterService.getActivatedStateNode().getMetadataNodePath();
-        String schemaNames = registryRepository.get(schemaPath);
-        List<String> schemaNameList = Strings.isNullOrEmpty(schemaNames) ? new ArrayList<>() : new ArrayList<>(Splitter.on(",").splitToList(schemaNames));
-        if (!schemaNameList.contains(schemaName)) {
-            schemaNameList.add(schemaName);
-            registryRepository.persist(schemaPath, Joiner.on(",").join(schemaNameList));
-        }
     }
 }
