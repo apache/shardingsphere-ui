@@ -17,8 +17,9 @@
 
 package org.apache.shardingsphere.ui.servcie.impl;
 
-import org.apache.shardingsphere.governance.core.yaml.config.YamlConfigurationConverter;
+import org.apache.shardingsphere.governance.core.registry.config.node.GlobalNode;
 import org.apache.shardingsphere.infra.config.properties.ConfigurationProperties;
+import org.apache.shardingsphere.infra.yaml.engine.YamlEngine;
 import org.apache.shardingsphere.ui.servcie.RegistryCenterService;
 import org.apache.shardingsphere.ui.servcie.ShardingPropertiesService;
 import org.springframework.stereotype.Service;
@@ -37,18 +38,18 @@ public final class ShardingPropertiesServiceImpl implements ShardingPropertiesSe
     
     @Override
     public String loadShardingProperties() {
-        return registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getPropsPath());
+        return registryCenterService.getActivatedRegistryCenter().get(GlobalNode.getPropsPath());
     }
     
     @Override
     public void updateShardingProperties(final String configData) {
         checkShardingProperties(configData);
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getPropsPath(), configData);
+        registryCenterService.getActivatedRegistryCenter().persist(GlobalNode.getPropsPath(), configData);
     }
     
     private void checkShardingProperties(final String configData) {
         try {
-            Properties props = YamlConfigurationConverter.convertProperties(configData);
+            Properties props = YamlEngine.unmarshal(configData, Properties.class);
             new ConfigurationProperties(props);
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {

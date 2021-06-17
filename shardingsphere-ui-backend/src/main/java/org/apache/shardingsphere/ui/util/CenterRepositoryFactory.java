@@ -19,10 +19,9 @@ package org.apache.shardingsphere.ui.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.shardingsphere.governance.repository.api.GovernanceRepository;
-import org.apache.shardingsphere.governance.repository.api.RegistryRepository;
-import org.apache.shardingsphere.governance.repository.api.config.GovernanceCenterConfiguration;
+import org.apache.shardingsphere.governance.repository.api.config.RegistryCenterConfiguration;
 import org.apache.shardingsphere.governance.repository.etcd.EtcdRepository;
+import org.apache.shardingsphere.governance.repository.spi.RegistryCenterRepository;
 import org.apache.shardingsphere.governance.repository.zookeeper.CuratorZookeeperRepository;
 import org.apache.shardingsphere.ui.common.constant.InstanceType;
 import org.apache.shardingsphere.ui.common.domain.CenterConfig;
@@ -36,33 +35,33 @@ import java.util.concurrent.ConcurrentHashMap;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CenterRepositoryFactory {
     
-    private static final ConcurrentHashMap<String, RegistryRepository> REGISTRY_REPOSITORY_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, RegistryCenterRepository> REGISTRY_REPOSITORY_MAP = new ConcurrentHashMap<>();
     
     /**
-     * Create registry repository.
+     * Create registry center repository.
      *
      * @param config center config
      * @return registry repository
      */
-    public static RegistryRepository createRegistryRepository(final CenterConfig config) {
-        RegistryRepository result = REGISTRY_REPOSITORY_MAP.get(config.getName());
+    public static RegistryCenterRepository createRegistryRepository(final CenterConfig config) {
+        RegistryCenterRepository result = REGISTRY_REPOSITORY_MAP.get(config.getName());
         if (null != result) {
             return result;
         }
-        result = (RegistryRepository) createGovernanceRepository(config.getInstanceType());
+        result = createGovernanceRepository(config.getInstanceType());
         result.init(config.getGovernanceName(), convert(config));
         REGISTRY_REPOSITORY_MAP.put(config.getName(), result);
         return result;
     }
     
-    private static GovernanceCenterConfiguration convert(final CenterConfig config) {
-        GovernanceCenterConfiguration result = new GovernanceCenterConfiguration(config.getInstanceType(), config.getServerLists(), new Properties());
+    private static RegistryCenterConfiguration convert(final CenterConfig config) {
+        RegistryCenterConfiguration result = new RegistryCenterConfiguration(config.getInstanceType(), config.getServerLists(), new Properties());
         result.getProps().put("digest", config.getDigest());
         return result;
     }
     
-    private static GovernanceRepository createGovernanceRepository(final String instanceType) {
-        RegistryRepository result;
+    private static RegistryCenterRepository createGovernanceRepository(final String instanceType) {
+        RegistryCenterRepository result;
         InstanceType type = InstanceType.nameOf(instanceType);
         switch (type) {
             case ZOOKEEPER:

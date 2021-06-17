@@ -19,11 +19,15 @@ package org.apache.shardingsphere.ui.servcie.impl;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import org.apache.shardingsphere.governance.core.registry.RegistryCenterNodeStatus;
-import org.apache.shardingsphere.governance.core.yaml.config.YamlConfigurationConverter;
+import com.google.common.base.Strings;
+import org.apache.shardingsphere.governance.core.registry.state.ResourceState;
+import org.apache.shardingsphere.governance.core.registry.state.node.StatesNode;
 import org.apache.shardingsphere.infra.config.RuleConfiguration;
-import org.apache.shardingsphere.readwrite.splitting.api.ReadWriteSplittingRuleConfiguration;
-import org.apache.shardingsphere.readwrite.splitting.api.rule.ReadWriteSplittingDataSourceRuleConfiguration;
+import org.apache.shardingsphere.infra.yaml.config.YamlRuleConfiguration;
+import org.apache.shardingsphere.infra.yaml.engine.YamlEngine;
+import org.apache.shardingsphere.infra.yaml.swapper.YamlRuleConfigurationSwapperEngine;
+import org.apache.shardingsphere.readwritesplitting.api.ReadwriteSplittingRuleConfiguration;
+import org.apache.shardingsphere.readwritesplitting.api.rule.ReadwriteSplittingDataSourceRuleConfiguration;
 import org.apache.shardingsphere.ui.common.dto.InstanceDTO;
 import org.apache.shardingsphere.ui.common.dto.ReadDataSourceDTO;
 import org.apache.shardingsphere.ui.servcie.GovernanceService;
@@ -57,16 +61,16 @@ public final class GovernanceServiceImpl implements GovernanceService {
         List<String> instanceIds = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(getInstancesNodeFullRootPath());
         Collection<InstanceDTO> result = new ArrayList<>(instanceIds.size());
         for (String instanceId : instanceIds) {
-            String value = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getProxyNodePath(instanceId));
-            result.add(new InstanceDTO(instanceId, !RegistryCenterNodeStatus.DISABLED.toString().equalsIgnoreCase(value)));
+            String value = registryCenterService.getActivatedRegistryCenter().get(StatesNode.getProxyNodePath(instanceId));
+            result.add(new InstanceDTO(instanceId, !ResourceState.DISABLED.toString().equalsIgnoreCase(value)));
         }
         return result;
     }
     
     @Override
     public void updateInstanceStatus(final String instanceId, final boolean enabled) {
-        String value = enabled ? "" : RegistryCenterNodeStatus.DISABLED.toString();
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getProxyNodePath(instanceId), value);
+        String value = enabled ? "" : ResourceState.DISABLED.toString();
+        registryCenterService.getActivatedRegistryCenter().persist(StatesNode.getProxyNodePath(instanceId), value);
     }
     
     @Override
@@ -79,7 +83,7 @@ public final class GovernanceServiceImpl implements GovernanceService {
             }
             if (configData.contains("!SHARDING")) {
                 handleShardingRuleConfiguration(result, configData, schemaName);
-            } else if (configData.contains("!READ_WRITE_SPLITTING")) {
+            } else if (configData.contains("!READWRITE_SPLITTING")) {
                 handleMasterSlaveRuleConfiguration(result, configData, schemaName);
             }
         }
@@ -88,60 +92,67 @@ public final class GovernanceServiceImpl implements GovernanceService {
     
     @Override
     public void updateReadDataSourceStatus(final String schemaNames, final String readDataSourceName, final boolean enabled) {
-        String value = enabled ? "" : RegistryCenterNodeStatus.DISABLED.toString();
-        registryCenterService.getActivatedRegistryCenter().persist(registryCenterService.getActivatedStateNode().getDataSourcePath(schemaNames, readDataSourceName), value);
+        String value = enabled ? "" : ResourceState.DISABLED.toString();
+        registryCenterService.getActivatedRegistryCenter().persist(StatesNode.getDataSourcePath(schemaNames, readDataSourceName), value);
     }
     
     private String getInstancesNodeFullRootPath() {
-        String result = registryCenterService.getActivatedStateNode().getProxyNodePath("");
+        String result = StatesNode.getProxyNodePath("");
         return result.substring(0, result.length() - 1);
     }
     
     private void handleShardingRuleConfiguration(final Collection<ReadDataSourceDTO> readDataSourceDTOS, final String configData, final String schemaName) {
-        Collection<RuleConfiguration> configurations = YamlConfigurationConverter.convertRuleConfigurations(configData);
-        Collection<ReadWriteSplittingRuleConfiguration> readWriteSplittingRuleConfigurations = configurations.stream().filter(
-            config -> config instanceof ReadWriteSplittingRuleConfiguration).map(config -> (ReadWriteSplittingRuleConfiguration) config).collect(Collectors.toList());
-        for (ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration : readWriteSplittingRuleConfigurations) {
-            addSlaveDataSource(readDataSourceDTOS, readWriteSplittingRuleConfiguration, schemaName);
+        Collection<RuleConfiguration> configurations = getRuleConfigurations(configData);
+        Collection<ReadwriteSplittingRuleConfiguration> readWriteSplittingRuleConfigurations = configurations.stream().filter(
+            config -> config instanceof ReadwriteSplittingRuleConfiguration).map(config -> (ReadwriteSplittingRuleConfiguration) config).collect(Collectors.toList());
+        for (ReadwriteSplittingRuleConfiguration readwriteSplittingRuleConfiguration : readWriteSplittingRuleConfigurations) {
+            addSlaveDataSource(readDataSourceDTOS, readwriteSplittingRuleConfiguration, schemaName);
         }
     }
     
     private void handleMasterSlaveRuleConfiguration(final Collection<ReadDataSourceDTO> readDataSourceDTOS, final String configData, final String schemaName) {
-        ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration = loadPrimaryReadRuleConfiguration(configData);
-        addSlaveDataSource(readDataSourceDTOS, readWriteSplittingRuleConfiguration, schemaName);
+        ReadwriteSplittingRuleConfiguration readwriteSplittingRuleConfiguration = loadReadwriteSplittingRuleConfiguration(configData);
+        addSlaveDataSource(readDataSourceDTOS, readwriteSplittingRuleConfiguration, schemaName);
     }
     
-    private ReadWriteSplittingRuleConfiguration loadPrimaryReadRuleConfiguration(final String configData) {
-        Collection<RuleConfiguration> ruleConfigurations = YamlConfigurationConverter.convertRuleConfigurations(configData);
-        Optional<ReadWriteSplittingRuleConfiguration> result = ruleConfigurations.stream().filter(
-                each -> each instanceof ReadWriteSplittingRuleConfiguration).map(ruleConfiguration -> (ReadWriteSplittingRuleConfiguration) ruleConfiguration).findFirst();
+    private ReadwriteSplittingRuleConfiguration loadReadwriteSplittingRuleConfiguration(final String configData) {
+        Collection<RuleConfiguration> ruleConfigurations = getRuleConfigurations(configData);
+        Optional<ReadwriteSplittingRuleConfiguration> result = ruleConfigurations.stream().filter(
+                each -> each instanceof ReadwriteSplittingRuleConfiguration).map(ruleConfiguration -> (ReadwriteSplittingRuleConfiguration) ruleConfiguration).findFirst();
         Preconditions.checkState(result.isPresent());
         return result.get();
     }
     
-    private void addSlaveDataSource(final Collection<ReadDataSourceDTO> readDataSourceDTOS, final ReadWriteSplittingRuleConfiguration readWriteSplittingRuleConfiguration, final String schemaName) {
+    private void addSlaveDataSource(final Collection<ReadDataSourceDTO> readDataSourceDTOS, final ReadwriteSplittingRuleConfiguration readwriteSplittingRuleConfiguration, final String schemaName) {
         Collection<String> disabledSchemaDataSourceNames = getDisabledSchemaDataSourceNames();
-        for (ReadWriteSplittingDataSourceRuleConfiguration each : readWriteSplittingRuleConfiguration.getDataSources()) {
+        for (ReadwriteSplittingDataSourceRuleConfiguration each : readwriteSplittingRuleConfiguration.getDataSources()) {
             readDataSourceDTOS.addAll(getReadDataSourceDTOS(schemaName, disabledSchemaDataSourceNames, each));
         }
     }
     
-    private Collection<ReadDataSourceDTO> getReadDataSourceDTOS(final String schemaName, final Collection<String> disabledSchemaDataSourceNames, final ReadWriteSplittingDataSourceRuleConfiguration group) {
+    private Collection<ReadDataSourceDTO> getReadDataSourceDTOS(final String schemaName, final Collection<String> disabledSchemaDataSourceNames, 
+                                                                final ReadwriteSplittingDataSourceRuleConfiguration group) {
         Collection<ReadDataSourceDTO> result = new LinkedList<>();
         for (String each : group.getReadDataSourceNames()) {
             result.add(new ReadDataSourceDTO(schemaName, group.getWriteDataSourceName(), each, !disabledSchemaDataSourceNames.contains(schemaName + "." + each)));
         }
         return result;
     }
+
+    private Collection<RuleConfiguration> getRuleConfigurations(final String yamlContent) {
+        Collection<YamlRuleConfiguration> rules = Strings.isNullOrEmpty(yamlContent)
+                ? new LinkedList<>() : YamlEngine.unmarshal(yamlContent, Collection.class);
+        return new YamlRuleConfigurationSwapperEngine().swapToRuleConfigurations(rules);
+    }
     
     private Collection<String> getDisabledSchemaDataSourceNames() {
         List<String> result = new ArrayList<>();
-        List<String> schemaNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getDataNodesPath());
+        List<String> schemaNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(StatesNode.getDataNodesPath());
         for (String schemaName : schemaNames) {
-            List<String> dataSourceNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(registryCenterService.getActivatedStateNode().getSchemaPath(schemaName));
+            List<String> dataSourceNames = registryCenterService.getActivatedRegistryCenter().getChildrenKeys(StatesNode.getSchemaPath(schemaName));
             for (String dataSourceName : dataSourceNames) {
-                String value = registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getDataSourcePath(schemaName, dataSourceName));
-                if (RegistryCenterNodeStatus.DISABLED.toString().equalsIgnoreCase(value)) {
+                String value = registryCenterService.getActivatedRegistryCenter().get(StatesNode.getDataSourcePath(schemaName, dataSourceName));
+                if (ResourceState.DISABLED.toString().equalsIgnoreCase(value)) {
                     result.add(Joiner.on(".").join(schemaName, dataSourceName));
                 }
             }

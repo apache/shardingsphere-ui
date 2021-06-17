@@ -17,11 +17,16 @@
 
 package org.apache.shardingsphere.ui.servcie.impl;
 
-import org.apache.shardingsphere.governance.core.yaml.config.YamlConfigurationConverter;
+import com.google.common.base.Preconditions;
+import org.apache.shardingsphere.governance.core.registry.config.node.GlobalNode;
+import org.apache.shardingsphere.infra.yaml.config.YamlRuleConfiguration;
+import org.apache.shardingsphere.infra.yaml.engine.YamlEngine;
 import org.apache.shardingsphere.ui.servcie.ProxyAuthenticationService;
 import org.apache.shardingsphere.ui.servcie.RegistryCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 /**
  * Implementation of sharding proxy authentication service.
@@ -34,19 +39,20 @@ public final class ProxyAuthenticationServiceImpl implements ProxyAuthentication
     
     @Override
     public String getAuthentication() {
-        return registryCenterService.getActivatedRegistryCenter().get(registryCenterService.getActivatedStateNode().getAuthenticationPath());
+        return registryCenterService.getActivatedRegistryCenter().get(GlobalNode.getGlobalRuleNode());
     }
     
     @Override
     public void updateAuthentication(final String authentication) {
         checkAuthenticationConfiguration(authentication);
         registryCenterService.getActivatedRegistryCenter()
-                .persist(registryCenterService.getActivatedStateNode().getAuthenticationPath(), authentication);
+                .persist(GlobalNode.getGlobalRuleNode(), authentication);
     }
     
     private void checkAuthenticationConfiguration(final String data) {
         try {
-            YamlConfigurationConverter.convertUserRule(data);
+            Collection<YamlRuleConfiguration> globalRuleConfigs = YamlEngine.unmarshal(data, Collection.class);
+            Preconditions.checkState(!globalRuleConfigs.isEmpty());
             // CHECKSTYLE:OFF
         } catch (final Exception ex) {
             // CHECKSTYLE:ON
