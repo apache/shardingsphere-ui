@@ -26,3 +26,11 @@ mvn clean package -Prelease
 ```
 
 Get the package in `shardingsphere-ui/shardingsphere-ui-distribution/shardingsphere-ui-bin-distribution/target/apache-shardingsphere-${latest.release.version}-shardingsphere-ui-bin.tar.gz`
+
+## Docker Image
+
+* [Docker hub](https://hub.docker.com/r/apache/shardingsphere-ui)
+* Get latest shardingsphere-ui docker image
+```bash
+$ docker pull apache/shardingsphere-ui
+```
